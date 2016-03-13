@@ -25,7 +25,7 @@
       <footer>
         <div id="copyright">
           <p><spring:message code="copyright" /></p>
-          <p>Powered by <a href="https://github.com/waterWang">water Wang</a> Cas-Server-Lab v0.0.1 </a>base on cas <%=org.jasig.cas.CasVersion.getVersion()%></p>
+          <p>Powered by <a href="https://github.com/waterWang">water Wang</a> Cas-Server-Lab v0.0.0.1 </a>base on cas <%=org.jasig.cas.CasVersion.getVersion()%></p>
          
         </div>
       </footer>
