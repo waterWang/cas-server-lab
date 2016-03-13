@@ -1,0 +1,1 @@
+{"name":"Cas-server-lab","tagline":"cas-server实验室","body":"CAS Server Lab\r\n============================\r\n\r\n\r\n\r\n## cas-server实验室\r\n\r\ntomcat8 + jdk 8\r\n\r\nbase on Cas 4.0.0\r\n\r\n1.登录地址：\r\n\thttps://localhost:8443/cas/login （admin/admin）\r\n\r\n","google":"","note":"Don't delete this file! It's used internally to help with page regeneration."}
