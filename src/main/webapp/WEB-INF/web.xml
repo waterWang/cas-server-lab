@@ -108,7 +108,17 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-	
+  <!-- start集成RESTful API -->
+  <servlet>  
+        <servlet-name>restlet</servlet-name>  
+        <servlet-class>org.restlet.ext.spring.RestletFrameworkServlet</servlet-class>  
+        <load-on-startup>1</load-on-startup>  
+    </servlet> 
+    <servlet-mapping>  
+        <servlet-name>restlet</servlet-name>  
+        <url-pattern>/v1/*</url-pattern>  
+    </servlet-mapping>  
+	<!-- end 集成RESTful API -->
   <servlet-mapping>
     <servlet-name>cas</servlet-name>
     <url-pattern>/login</url-pattern>
