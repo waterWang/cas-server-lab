@@ -15,7 +15,9 @@
 
 - [x] [server返回更多user信息给client](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.4)   
  
-##### 参考文献 https://wiki.jasig.org/display/CASUM/RESTful+API
+##### 参考文献   
+    http://ju.outofmemory.cn/entry/107656  
+    http://skyfar666.iteye.com/blog/2275930
 
 ## 意见反馈
 欢迎大家随时提交反馈意见及功能需求，或fork之后new pull request，本人会及时对问题进行回复，[请戳我提交issue。](https://github.com/waterWang/cas-server-lab/issues/new)
