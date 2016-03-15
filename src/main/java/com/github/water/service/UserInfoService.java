@@ -13,7 +13,7 @@ import com.github.water.domain.UserInfo;
 
 
 /**
- * @author Administrator
+ * @author water
  *
  */
 public class UserInfoService {
@@ -21,7 +21,7 @@ public class UserInfoService {
 	private final JdbcTemplate jdbcTemplate;
 	
 
-	private static final String DEFAULT_SELECT_STATEMENT = "select * from jhi_user where phone_number = ? or email = ?";
+	private static final String DEFAULT_SELECT_STATEMENT = "select * from jhi_user where phone_number = ? or lower(email) = ?";
 	
 	
 	public UserInfoService(JdbcTemplate jdbcTemplate) {

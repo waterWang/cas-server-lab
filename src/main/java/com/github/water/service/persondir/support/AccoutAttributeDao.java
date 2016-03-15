@@ -1,4 +1,4 @@
-package com.github.water.services.persondir.support;
+package com.github.water.service.persondir.support;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,8 +21,8 @@ import com.github.water.service.util.CasServerUtil;
  */
 public class AccoutAttributeDao extends StubPersonAttributeDao {
 
-	@NotNull
-    protected UserInfoService userInfoService;
+//	@NotNull
+	public UserInfoService userInfoService;
 	
 	public String server = "https://wangweiwei:8443/cas/login";
 	public String service = "http://172.16.40.99:8080/j_spring_cas_security_check";
