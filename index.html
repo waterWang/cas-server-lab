@@ -23,14 +23,63 @@
 <a id="cas-server-lab" class="anchor" href="#cas-server-lab" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>CAS Server Lab</h1>
 
 <h2>
-<a id="cas-server实验室" class="anchor" href="#cas-server%E5%AE%9E%E9%AA%8C%E5%AE%A4" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>cas-server实验室</h2>
+<a id="简介" class="anchor" href="#%E7%AE%80%E4%BB%8B" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>简介</h2>
 
-<p>tomcat8 + jdk 8</p>
+<p>欢迎访问CAS Server Lab，旨在解决集成SSO中常用的场景分析及技术解决方案，如有问题欢迎大家随时提交issue。</p>
 
-<p>base on Cas 4.0.0</p>
+<h2>
+<a id="环境" class="anchor" href="#%E7%8E%AF%E5%A2%83" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>环境</h2>
 
-<p>1.登录地址：
-    https://localhost:8443/cas/login （admin/admin）</p>
+<pre><code>tomcat8 + jdk 8
+base on Cas 4.0.0
+</code></pre>
+
+<h3>
+<a id="v0001" class="anchor" href="#v0001" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>v0.0.0.1</h3>
+
+<ul>
+<li>[x] <a href="https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.1">CAS服务端演示</a><br>
+1.登录地址：https://localhost:8443/cas/login （admin/admin）</li>
+</ul>
+
+<h3>
+<a id="v0002" class="anchor" href="#v0002" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>v0.0.0.2</h3>
+
+<ul>
+<li>[x] <a href="https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.2">支持数据库连接，从DB中验证密码</a><br>
+1.DB连接： HikariCP<br>
+2.加密方式：security的BCryptPasswordEncoder</li>
+</ul>
+
+<h3>
+<a id="v0003" class="anchor" href="#v0003" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>v0.0.0.3</h3>
+
+<ul>
+<li>[x] <a href="https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.3">集成RESTful API</a><br>
+</li>
+</ul>
+
+<h5>
+<a id="参考文献-httpswikijasigorgdisplaycasumrestfulapi" class="anchor" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE-httpswikijasigorgdisplaycasumrestfulapi" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>参考文献 <a href="https://wiki.jasig.org/display/CASUM/RESTful+API">https://wiki.jasig.org/display/CASUM/RESTful+API</a>
+</h5>
+
+<h2>
+<a id="意见反馈" class="anchor" href="#%E6%84%8F%E8%A7%81%E5%8F%8D%E9%A6%88" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>意见反馈</h2>
+
+<p>欢迎大家随时提交反馈意见及功能需求，或fork之后new pull request，本人会及时对问题进行回复，<a href="https://github.com/waterWang/cas-server-lab/issues/new">请戳我提交issue。</a></p>
+
+<h2>
+<a id="异常情况测试汇总" class="anchor" href="#%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5%E6%B5%8B%E8%AF%95%E6%B1%87%E6%80%BB" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>异常情况测试汇总</h2>
+
+<h2>
+<a id="参考文献" class="anchor" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>参考文献</h2>
+
+<ol>
+<li> CAS 官网：<a href="http://www.jasig.org/cas">http://www.jasig.org/cas</a>
+</li>
+<li> CAS Document API：<a href="http://jasig.github.io/cas/4.0.x/index.html">http://jasig.github.io/cas/4.0.x/index.html</a>
+</li>
+</ol>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/waterWang/cas-server-lab">Cas-server-lab</a> is maintained by <a href="https://github.com/waterWang">waterWang</a>.</span>
