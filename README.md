@@ -1,5 +1,8 @@
 # CAS Server Lab
 
+## 项目官网：<http://waterwang.github.io/cas-server-lab/>
+## 项目wiki：<https://github.com/waterWang/cas-server-lab/wiki>  
+
 ## 简介
 欢迎访问CAS Server Lab，旨在解决集成SSO中常用的场景分析及技术解决方案，如有问题欢迎大家随时提交issue。
 
@@ -7,16 +10,9 @@
 	tomcat8 + jdk 8
 	base on Cas 4.0.0
 	
-### v0.0.0.1
-- [x] [CAS服务端演示](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.1)  
-    1.登录地址：https://localhost:8443/cas/login （admin/admin）
 
-### v0.0.0.2
-- [x] [支持数据库连接，从DB中验证密码](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.2)  
-1.DB连接： HikariCP  
-2.加密方式：security的BCryptPasswordEncoder
+### 当前版本 v0.0.0.3
 
-### v0.0.0.3
 - [x] [集成RESTful API](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.3)   
  
 ##### 参考文献 https://wiki.jasig.org/display/CASUM/RESTful+API
