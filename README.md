@@ -8,16 +8,16 @@
 	base on Cas 4.0.0
 	
 ### v0.0.0.1
-- [x] [CAS服务端演示](../tree/release-v0.0.0.1)  
+- [x] [CAS服务端演示](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.1)  
     1.登录地址：https://localhost:8443/cas/login （admin/admin）
 
 ### v0.0.0.2
-- [x] [支持数据库连接，从DB中验证密码](../tree/release-v0.0.0.2)  
+- [x] [支持数据库连接，从DB中验证密码](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.2)  
 1.DB连接： HikariCP  
 2.加密方式：security的BCryptPasswordEncoder
 
 ### v0.0.0.3
-- [x] [集成RESTful API](../tree/release-v0.0.0.3)   
+- [x] [集成RESTful API](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.3)   
  
 ##### 参考文献 https://wiki.jasig.org/display/CASUM/RESTful+API
 
