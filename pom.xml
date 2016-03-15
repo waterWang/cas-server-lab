@@ -8,7 +8,7 @@
     <artifactId>cas-server-lab</artifactId>
      <groupId>com.github.water</groupId>
     <packaging>war</packaging>
-    <version>0.0.0.3</version>
+    <version>0.0.0.4</version>
 
     <build>
         <plugins>
