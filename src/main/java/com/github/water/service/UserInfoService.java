@@ -13,7 +13,7 @@ import com.github.water.domain.UserInfo;
 
 
 /**
- * @author Administrator
+ * @author water
  *
  */
 public class UserInfoService {
