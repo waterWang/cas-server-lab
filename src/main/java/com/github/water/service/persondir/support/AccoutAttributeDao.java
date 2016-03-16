@@ -13,7 +13,6 @@ import org.jasig.services.persondir.support.StubPersonAttributeDao;
 
 import com.github.water.domain.UserInfo;
 import com.github.water.service.UserInfoService;
-import com.github.water.service.util.CasServerUtil;
 
 /**
  * @author water
