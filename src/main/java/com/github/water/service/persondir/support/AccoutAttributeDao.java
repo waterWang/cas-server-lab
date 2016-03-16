@@ -21,25 +21,30 @@ import com.github.water.service.util.CasServerUtil;
  */
 public class AccoutAttributeDao extends StubPersonAttributeDao {
 
-//	@NotNull
+	@NotNull
 	public UserInfoService userInfoService;
 	
-	public String server = "https://wangweiwei:8443/cas/login";
-	public String service = "http://172.16.40.99:8080/j_spring_cas_security_check";
+	public void setUserInfoService(UserInfoService userInfoService) {
+		this.userInfoService = userInfoService;
+	}
+	
+//	public String server = "https://wangweiwei:8443/cas/login";
+//	public String service = "http://172.16.40.99:8080/j_spring_cas_security_check";
 	
 	@Override
 	public IPersonAttributes getPerson(String uid) {
 		
 		UserInfo u = this.userInfoService.loadUserInfo(uid);
 		
-		String ticket = CasServerUtil.getTicket(server, uid, u.getPassword(), service);
+		System.out.println("~~~~~"+ u.getId());
+//		String ticket = CasServerUtil.getTicket(server, uid, u.getPassword(), service);
 		
 		Map<String, List<Object>> attributes = new HashMap<String, List<Object>>();
 		attributes.put("username",Collections.singletonList((Object)u.getLogin()));
 		attributes.put("email",Collections.singletonList((Object)u.getEmail()));
 		attributes.put("phonenumber",Collections.singletonList((Object)u.getPhone_number()));
-		attributes.put("id",Collections.singletonList((Object)u.getId()));
-		attributes.put("ticket",Collections.singletonList((Object)ticket));
+		attributes.put("userId",Collections.singletonList((Object)u.getId()));
+//		attributes.put("ticket",Collections.singletonList((Object)ticket));
 		
 		return new AttributeNamedPersonImpl(attributes);
 	}
