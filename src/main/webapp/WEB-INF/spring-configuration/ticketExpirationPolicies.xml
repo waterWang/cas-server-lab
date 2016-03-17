@@ -35,11 +35,13 @@
     </description>
 
     <!-- Expiration policies -->
+    <!-- 使用次数为10 次或者超过100秒没有应用均会引起st过期； -->
     <util:constant id="SECONDS" static-field="java.util.concurrent.TimeUnit.SECONDS"/>
     <bean id="serviceTicketExpirationPolicy" class="org.jasig.cas.ticket.support.MultiTimeUseOrTimeoutExpirationPolicy"
-          c:numberOfUses="1" c:timeToKill="${st.timeToKillInSeconds:10}" c:timeUnit-ref="SECONDS"/>
+          c:numberOfUses="10" c:timeToKill="${st.timeToKillInSeconds:100}" c:timeUnit-ref="SECONDS"/>
 
     <!-- TicketGrantingTicketExpirationPolicy: Default as of 3.5 -->
+    <!-- 当用户在2个小时（7200秒）之内不动移动鼠标或者进行系统超过8个小时（28800秒），则tgt过期 -->
     <!-- Provides both idle and hard timeouts, for instance 2 hour sliding window with an 8 hour max lifetime -->
     <bean id="grantingTicketExpirationPolicy" class="org.jasig.cas.ticket.support.TicketGrantingTicketExpirationPolicy"
           p:maxTimeToLiveInSeconds="${tgt.maxTimeToLiveInSeconds:28800}"

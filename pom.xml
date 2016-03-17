@@ -8,7 +8,7 @@
     <artifactId>cas-server-lab</artifactId>
      <groupId>com.github.water</groupId>
     <packaging>war</packaging>
-    <version>0.0.0.2</version>
+    <version>0.0.0.4</version>
 
     <build>
         <plugins>
@@ -83,6 +83,18 @@
             <version>3.1</version>
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+		    <groupId>org.jasig.cas</groupId>
+		    <artifactId>cas-server-integration-restlet</artifactId>
+		    <version>${cas.version}</version>
+		    <type>jar</type>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-web</artifactId>
+		    <version>3.2.6.RELEASE</version>
+		</dependency>
 
     </dependencies>
 
