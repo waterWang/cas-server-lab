@@ -11,3 +11,5 @@ overlays/
 build/
 bin/
 *.iml
+cas.log
+perfStats.log
