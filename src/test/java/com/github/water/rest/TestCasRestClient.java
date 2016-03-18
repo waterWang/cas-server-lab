@@ -135,9 +135,10 @@ public final class TestCasRestClient {
 		// 现在使用邮箱、手机登录
 		final String username = "user@localhost";
 		final String password = "user";
-		final String service = "http://172.16.40.99:8080/j_spring_cas_security_check";
+		final String service = "http://172.16.40.44:8080/j_spring_cas_security_check";
 
 		LOG.info(getTicket(server, username, password, service));
+		System.out.println("-------"+ getTicket(server, username, password, service));
 //		浏览器上输入  service?ticket=上面获取的ST  即可登录
 	}
 }
