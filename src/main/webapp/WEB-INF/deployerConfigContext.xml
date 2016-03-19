@@ -98,7 +98,7 @@
 				destroy-method="shutdown">
 				<constructor-arg>
 					<bean class="com.zaxxer.hikari.HikariConfig">
-					<property name="driverClass" value="${db.driverClassName}"/>
+					<property name="driverClassName" value="${db.driverClassName}"/>
 					<property name="jdbcUrl" value="${db.jdbcUrl}"/>
 					<property name="username" value="${db.username}"/>
 					<property name="password" value="${db.password}"/>
