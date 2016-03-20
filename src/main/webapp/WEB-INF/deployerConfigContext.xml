@@ -90,6 +90,7 @@
 		</property>
 	</bean>
 
+
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource">
 			<!-- HikariCP 高性能数据库连接池 -->
@@ -97,16 +98,15 @@
 				destroy-method="shutdown">
 				<constructor-arg>
 					<bean class="com.zaxxer.hikari.HikariConfig">
-						<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-						<property name="jdbcUrl"
-							value="jdbc:mysql://localhost:3306/dledu_dev?useUnicode=true&amp;characterEncoding=UTF-8" />
-						<property name="username" value="root" />
-						<property name="password" value="" />
-						<property name="connectionTimeout" value="3000" />
-						<property name="idleTimeout" value="600000" />
-						<property name="maxLifetime" value="1800000" />
-						<property name="maximumPoolSize" value="20" />
-						<property name="minimumIdle" value="100" />
+					<property name="driverClassName" value="${db.driverClassName}"/>
+					<property name="jdbcUrl" value="${db.jdbcUrl}"/>
+					<property name="username" value="${db.username}"/>
+					<property name="password" value="${db.password}"/>
+					<property name="connectionTimeout" value="${db.connectionTimeout}"/>
+					<property name="idleTimeout" value="${db.idleTimeout}"/>
+					<property name="maxLifetime" value="${db.maxLifetime}"/>
+					<property name="maximumPoolSize" value="${db.maximumPoolSize}"/>
+					<property name="minimumIdle" value="${db.minimumIdle}"/>
 					</bean>
 				</constructor-arg>
 			</bean>
@@ -139,9 +139,9 @@
 	<!-- 修改前 end -->
 	<!--修改后 返回更多user信息 -->
 	<bean id="attributeRepository"
-		class="com.github.water.service.persondir.support.AccoutAttributeDao" >
-		<property name="userInfoService" ref="userInfoService" /> 
-	</bean>	 
+		class="com.github.water.service.persondir.support.AccoutAttributeDao">
+		<property name="userInfoService" ref="userInfoService" />
+	</bean>
 	<!--修改后 end -->
 
 	<!-- Sample, in-memory data store for the ServiceRegistry. A real implementation 
