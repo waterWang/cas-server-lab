@@ -83,13 +83,12 @@
 		class="com.github.water.authentication.AcceptJdbcUsersAuthenticationHandler">
 		<property name="userInfoService" ref="userInfoService" />
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
-		<property name="passwordEncoder">
-			<!-- 自定义加密方式（security的BCryptPasswordEncoder加密） -->
-			<bean id="passwordEncoder" class="com.github.water.conf.MyPasswordEncoder">
-			</bean>
-		</property>
+		<!-- <property name="passwordEncoder" ref="passwordEncoder" /> -->
 	</bean>
-
+	
+	<!-- 自定义加密方式（security的BCryptPasswordEncoder加密） -->
+			<bean id="myPasswordEncoder" class="com.github.water.conf.MyPasswordEncoder">
+			</bean>
 
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource">
@@ -114,7 +113,8 @@
 	</bean>
 
 	<bean id="userInfoService" class="com.github.water.service.UserInfoService">
-		<constructor-arg index="0" ref="jdbcTemplate" />
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="myPasswordEncoder" ref="myPasswordEncoder" />
 	</bean>
 
 	<!-- Required for proxy ticket mechanism -->

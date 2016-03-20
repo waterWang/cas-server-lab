@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
+import com.github.water.conf.MyPasswordEncoder;
 import com.github.water.domain.UserInfo;
 
 /**
@@ -20,14 +21,13 @@ import com.github.water.domain.UserInfo;
 public class UserInfoService {
 	private static final Logger log = LoggerFactory
 			.getLogger(UserInfoService.class);
-	private final JdbcTemplate jdbcTemplate;
+	
+	public JdbcTemplate jdbcTemplate;
+	public MyPasswordEncoder myPasswordEncoder;
 
-	private static final String DEFAULT_SELECT_STATEMENT = "select * from jhi_user where phone_number = ? or lower(email) = ?";
-	private static final String DEFAULT_CREATE_STATEMENT = "INSERT INTO jhi_user (login,password,activated,created_by,created_date) VALUES(?,?,?,?,?)";
+	private  final String DEFAULT_SELECT_STATEMENT = "select * from jhi_user where phone_number = ? or lower(email) = ?";
+	private  final String DEFAULT_CREATE_STATEMENT = "INSERT INTO jhi_user (login,password,activated,created_by,created_date) VALUES(?,?,?,?,?)";
 
-	public UserInfoService(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
 
 	public UserInfo loadUserInfo(String username) {
 		List<UserInfo> listUserInfo = jdbcTemplate.query(
@@ -42,10 +42,15 @@ public class UserInfoService {
 
 	public void cerateUser(UserInfo userInfo) {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
-
-		jdbcTemplate.update(DEFAULT_CREATE_STATEMENT,
-				new Object[] { userInfo.getLogin(), userInfo.getPassword(), 1,
-						userInfo.getLogin(), df.format(new Date()) });
+		String pwd = myPasswordEncoder.encode(userInfo.getLogin());
+		try {
+			jdbcTemplate.update(DEFAULT_CREATE_STATEMENT,
+					new Object[] { userInfo.getLogin(), pwd, 1,
+							userInfo.getLogin(), df.format(new Date()) });
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 	}
 
 	private final class UserInfoRowMapper implements RowMapper<UserInfo> {
@@ -65,6 +70,14 @@ public class UserInfoService {
 
 			return u;
 		}
+	}
+
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+
+	public void setMyPasswordEncoder(MyPasswordEncoder myPasswordEncoder) {
+		this.myPasswordEncoder = myPasswordEncoder;
 	}
 
 }

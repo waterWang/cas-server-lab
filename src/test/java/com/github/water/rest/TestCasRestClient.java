@@ -133,7 +133,7 @@ public final class TestCasRestClient {
 		// cas server的地址，http或者https都可以
 		final String server = "https://wangweiwei:8443/cas/v1/tickets";
 		// 现在使用邮箱、手机登录
-		final String username = "user@localhost";
+		final String username = "user1@localhost";
 		final String password = "user";
 		final String service = "http://172.16.40.44:8080/j_spring_cas_security_check";
 
