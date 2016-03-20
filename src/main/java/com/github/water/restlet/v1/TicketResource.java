@@ -1,10 +1,7 @@
 package com.github.water.restlet.v1;
 
 import java.util.Formatter;
-import java.util.HashSet;
-import java.util.Set;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.jasig.cas.CentralAuthenticationService;
 import org.jasig.cas.authentication.Credential;
 import org.jasig.cas.authentication.UsernamePasswordCredential;
@@ -68,28 +65,11 @@ public class TicketResource extends ServerResource
     WebRequestDataBinder binder = new WebRequestDataBinder(c);
     RestletWebRequest webRequest = new RestletWebRequest(getRequest());
 
-    logFormRequest(new Form(getRequest().getEntity()));
+    webRequest.logFormRequest(new Form(getRequest().getEntity()));
     binder.bind(webRequest);
 
     return c;
   }
 
-  @SuppressWarnings({ "rawtypes", "unchecked" })
-private void logFormRequest(Form form) {
-    if (LOGGER.isDebugEnabled()) {
-      Set pairs = new HashSet();
-      for (String name : form.getNames()) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(name);
-        builder.append(": ");
-        if (!"password".equalsIgnoreCase(name))
-          builder.append(form.getValues(name));
-        else {
-          builder.append("*****");
-        }
-        pairs.add(builder.toString());
-      }
-      LOGGER.debug(StringUtils.join(pairs, ", "));
-    }
-  }
+ 
 }

@@ -69,8 +69,8 @@ public final class TestAccountResource {
 	public static void main(final String[] args) {
 		// API 地址
 		final String server = "https://wangweiwei:8443/cas/v1/accounts";
-		final String login = "wwddd";
-		final String password = "userw";
+		final String login = "user@localhost";
+		final String password = "user";
 
 		LOG.info(createAccount(server, login, password));
 	}

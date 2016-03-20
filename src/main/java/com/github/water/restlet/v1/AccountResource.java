@@ -1,13 +1,10 @@
 package com.github.water.restlet.v1;
 
 import java.util.Formatter;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -82,30 +79,9 @@ public class AccountResource extends ServerResource {
 		WebRequestDataBinder binder = new WebRequestDataBinder(userInfo);
 		RestletWebRequest webRequest = new RestletWebRequest(getRequest());
 
-		logFormRequest(new Form(getRequest().getEntity()));
+		webRequest.logFormRequest(new Form(getRequest().getEntity()));
 		binder.bind(webRequest);
 
 		return userInfo;
 	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void logFormRequest(Form form) {
-		if (LOGGER.isDebugEnabled()) {
-			Set pairs = new HashSet();
-			for (String name : form.getNames()) {
-				StringBuilder builder = new StringBuilder();
-				builder.append(name);
-				builder.append(": ");
-				if (!"password".equalsIgnoreCase(name))
-					builder.append(form.getValues(name));
-				else {
-					builder.append("*****");
-				}
-				pairs.add(builder.toString());
-			}
-			LOGGER.debug(StringUtils.join(pairs, ", "));
-		}
-	}
-
-	
 }
