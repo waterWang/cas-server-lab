@@ -5,8 +5,6 @@ import org.jasig.cas.authentication.PreventedException;
 import org.jasig.cas.authentication.UsernamePasswordCredential;
 import org.jasig.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;
 import org.jasig.cas.authentication.principal.SimplePrincipal;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.github.water.conf.MyPasswordEncoder;
@@ -23,24 +21,24 @@ import java.security.GeneralSecurityException;
 
 public class AcceptJdbcUsersAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler {
 	
-	private static Logger log = LoggerFactory.getLogger(AbstractUsernamePasswordAuthenticationHandler.class);
-	
-	
-	private static final String LOCK_USER_UPDATE_STATEMENT = "UPDATE USERINFO SET ISLOCKED = ?  , UNLOCKTIME = ? WHERE ID = ?";
-	
-	private static final String UNLOCK_USER_UPDATE_STATEMENT = "UPDATE USERINFO SET ISLOCKED = ? , UNLOCKTIME = ? WHERE ID = ?";
-	
-	private static final String BADPASSWORDCOUNT_UPDATE_STATEMENT = "UPDATE USERINFO SET BADPASSWORDCOUNT = ? , BADPASSWORDTIME = ?  WHERE ID = ?";
-	
-	private static final String BADPASSWORDCOUNT_RESET_UPDATE_STATEMENT = "UPDATE USERINFO SET BADPASSWORDCOUNT = ? , ISLOCKED = ? ,UNLOCKTIME = ?  WHERE ID = ?";
-	
-	private static final String HISTORY_LOGIN_INSERT_STATEMENT = "INSERT INTO LOGIN_HISTORY (ID , SESSIONID , UID , USERNAME , DISPLAYNAME , LOGINTYPE , MESSAGE , CODE , PROVIDER , SOURCEIP , BROWSER , PLATFORM , APPLICATION , LOGINURL )VALUES( ? , ? , ? , ? , ?, ? , ? , ?, ? , ? , ?, ? , ? , ?)";
-	
-	private static final String LOGIN_USERINFO_UPDATE_STATEMENT  = "UPDATE USERINFO SET LASTLOGINTIME = ?  , LASTLOGINIP = ? , LOGINCOUNT = ?  WHERE ID = ?";
-	
-	private static final String LOGOUT_USERINFO_UPDATE_STATEMENT = "UPDATE USERINFO SET LASTLOGOFFTIME = ?   WHERE ID = ?";
-	
-	private static final String HISTORY_LOGOUT_UPDATE_STATEMENT = "UPDATE LOGIN_HISTORY SET LOGOUTTIME = ?  WHERE  SESSIONID = ?";
+//	private static Logger log = LoggerFactory.getLogger(AbstractUsernamePasswordAuthenticationHandler.class);
+//	
+//	
+//	private static final String LOCK_USER_UPDATE_STATEMENT = "UPDATE USERINFO SET ISLOCKED = ?  , UNLOCKTIME = ? WHERE ID = ?";
+//	
+//	private static final String UNLOCK_USER_UPDATE_STATEMENT = "UPDATE USERINFO SET ISLOCKED = ? , UNLOCKTIME = ? WHERE ID = ?";
+//	
+//	private static final String BADPASSWORDCOUNT_UPDATE_STATEMENT = "UPDATE USERINFO SET BADPASSWORDCOUNT = ? , BADPASSWORDTIME = ?  WHERE ID = ?";
+//	
+//	private static final String BADPASSWORDCOUNT_RESET_UPDATE_STATEMENT = "UPDATE USERINFO SET BADPASSWORDCOUNT = ? , ISLOCKED = ? ,UNLOCKTIME = ?  WHERE ID = ?";
+//	
+//	private static final String HISTORY_LOGIN_INSERT_STATEMENT = "INSERT INTO LOGIN_HISTORY (ID , SESSIONID , UID , USERNAME , DISPLAYNAME , LOGINTYPE , MESSAGE , CODE , PROVIDER , SOURCEIP , BROWSER , PLATFORM , APPLICATION , LOGINURL )VALUES( ? , ? , ? , ? , ?, ? , ? , ?, ? , ? , ?, ? , ? , ?)";
+//	
+//	private static final String LOGIN_USERINFO_UPDATE_STATEMENT  = "UPDATE USERINFO SET LASTLOGINTIME = ?  , LASTLOGINIP = ? , LOGINCOUNT = ?  WHERE ID = ?";
+//	
+//	private static final String LOGOUT_USERINFO_UPDATE_STATEMENT = "UPDATE USERINFO SET LASTLOGOFFTIME = ?   WHERE ID = ?";
+//	
+//	private static final String HISTORY_LOGOUT_UPDATE_STATEMENT = "UPDATE LOGIN_HISTORY SET LOGOUTTIME = ?  WHERE  SESSIONID = ?";
 	
 	public final static String FORMAT_DATE_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 	
