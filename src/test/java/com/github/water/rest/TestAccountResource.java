@@ -13,12 +13,12 @@ import org.apache.commons.httpclient.methods.PostMethod;
  * 测试rest方式插入用户
  * 
  * */
-public final class TestAccountClient {
+public final class TestAccountResource {
 
-	private static Logger LOG = Logger.getLogger(TestAccountClient.class
+	private static Logger LOG = Logger.getLogger(TestAccountResource.class
 			.getName());
 
-	private TestAccountClient() {
+	private TestAccountResource() {
 	}
 
 	private static String createAccount(String server, String login,

@@ -47,11 +47,11 @@
 		<property name="userInfoService" ref="userInfoService" />
 	</bean>
 
-	<bean id="ticketResource" class="org.jasig.cas.integration.restlet.TicketResource"
+	<bean id="ticketResource" class="com.github.water.restlet.v1.TicketResource"
 		scope="prototype" />
 
 	<bean id="ticketGrantingTicketResource"
-		class="org.jasig.cas.integration.restlet.TicketGrantingTicketResource"
+		class="com.github.water.restlet.v1.TicketGrantingTicketResource"
 		scope="prototype" />
 
 </beans>

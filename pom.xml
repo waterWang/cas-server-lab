@@ -115,5 +115,5 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
     </repositories>
-    <description>cas-server实验室</description>
+    <description>cas-server-lab</description>
 </project>
