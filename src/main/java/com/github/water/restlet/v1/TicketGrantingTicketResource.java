@@ -18,39 +18,46 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public final class TicketGrantingTicketResource extends ServerResource
-{
-  private static final Logger LOGGER = LoggerFactory.getLogger(TicketGrantingTicketResource.class);
+public final class TicketGrantingTicketResource extends ServerResource {
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(TicketGrantingTicketResource.class);
 
-  @Autowired
-  private CentralAuthenticationService centralAuthenticationService;
-  private String ticketGrantingTicketId;
+	@Autowired
+	private CentralAuthenticationService centralAuthenticationService;
+	private String ticketGrantingTicketId;
 
-  public void init(Context context, Request request, Response response) { super.init(context, request, response);
-    this.ticketGrantingTicketId = ((String)request.getAttributes().get("ticketGrantingTicketId"));
-    setNegotiated(false);
-    getVariants().add(new Variant(MediaType.APPLICATION_WWW_FORM)); }
+	public void init(Context context, Request request, Response response) {
+		super.init(context, request, response);
+		this.ticketGrantingTicketId = ((String) request.getAttributes().get(
+				"ticketGrantingTicketId"));
+		setNegotiated(false);
+		getVariants().add(new Variant(MediaType.APPLICATION_WWW_FORM));
+	}
 
-  @Delete
-  public void removeRepresentations()
-  {
-    this.centralAuthenticationService.destroyTicketGrantingTicket(this.ticketGrantingTicketId);
-    getResponse().setStatus(Status.SUCCESS_OK);
-  }
+	@Delete
+	public void removeRepresentations() {
+		this.centralAuthenticationService
+				.destroyTicketGrantingTicket(this.ticketGrantingTicketId);
+		getResponse().setStatus(Status.SUCCESS_OK);
+	}
 
-  @Post
-  public void acceptRepresentation(Representation entity) {
-    Form form = new Form(entity);
-    String serviceUrl = form.getFirstValue("service");
-    try {
-      String serviceTicketId = this.centralAuthenticationService.grantServiceTicket(this.ticketGrantingTicketId, new SimpleWebApplicationServiceImpl(serviceUrl));
+	@Post
+	public void acceptRepresentation(Representation entity) {
+		Form form = new Form(entity);
+		String serviceUrl = form.getFirstValue("service");
+		try {
+			String serviceTicketId = this.centralAuthenticationService
+					.grantServiceTicket(this.ticketGrantingTicketId,
+							new SimpleWebApplicationServiceImpl(serviceUrl));
 
-      getResponse().setEntity(serviceTicketId, MediaType.TEXT_PLAIN);
-    } catch (InvalidTicketException e) {
-      getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND, "TicketGrantingTicket could not be found.");
-    } catch (Exception e) {
-      LOGGER.error(e.getMessage(), e);
-      getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST, e.getMessage());
-    }
-  }
+			getResponse().setEntity(serviceTicketId, MediaType.TEXT_PLAIN);
+		} catch (InvalidTicketException e) {
+			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND,
+					"TicketGrantingTicket could not be found.");
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,
+					e.getMessage());
+		}
+	}
 }

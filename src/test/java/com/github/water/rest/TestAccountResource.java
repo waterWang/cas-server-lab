@@ -50,7 +50,7 @@ public final class TestAccountResource {
 			}
 			default:
 				LOG.info("Invalid response code (" + post.getStatusCode()
-						+ ") from CAS server!");
+						+ ") from DlCAS server!");
 				break;
 			}
 		} catch (final IOException e) {
