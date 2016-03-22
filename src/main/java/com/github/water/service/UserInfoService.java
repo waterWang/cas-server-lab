@@ -25,13 +25,13 @@ public class UserInfoService {
 	public JdbcTemplate jdbcTemplate;
 	public MyPasswordEncoder myPasswordEncoder;
 
-	private  final String DEFAULT_SELECT_STATEMENT = "select * from jhi_user where phone_number = ? or lower(email) = ?";
+	private  final String DEFAULT_SELECT_STATEMENT = "select * from jhi_user where lower(login) = ? or phone_number = ? or lower(email) = ?";
 	private  final String DEFAULT_CREATE_STATEMENT = "INSERT INTO jhi_user (login,password,activated,created_by,created_date) VALUES(?,?,?,?,?)";
 
 
 	public UserInfo loadUserInfo(String username) {
 		List<UserInfo> listUserInfo = jdbcTemplate.query(
-				DEFAULT_SELECT_STATEMENT, new UserInfoRowMapper(), username,
+				DEFAULT_SELECT_STATEMENT, new UserInfoRowMapper(), username,username,
 				username);
 		log.info("query UserInfo List " + listUserInfo);
 		if (listUserInfo != null && listUserInfo.size() > 0) {
@@ -40,17 +40,18 @@ public class UserInfoService {
 		return null;
 	}
 
-	public void cerateUser(UserInfo userInfo) {
+	public String cerateUser(UserInfo userInfo) {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
-		String pwd = myPasswordEncoder.encode(userInfo.getLogin());
-		try {
-			jdbcTemplate.update(DEFAULT_CREATE_STATEMENT,
-					new Object[] { userInfo.getLogin(), pwd, 1,
-							userInfo.getLogin(), df.format(new Date()) });
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
+		String pwd = myPasswordEncoder.encode(userInfo.getPassword());
+			//检测数据库中是否已经存在改注册的用户
+			UserInfo user = loadUserInfo(userInfo.getLogin());
+			if (user == null) {
+				jdbcTemplate.update(DEFAULT_CREATE_STATEMENT,
+						new Object[] { userInfo.getLogin(), pwd, 1,
+								userInfo.getLogin(), df.format(new Date()) });
+				return "success";
+			}
+			return "the "+userInfo.getLogin() + " already exists!";
 	}
 
 	private final class UserInfoRowMapper implements RowMapper<UserInfo> {

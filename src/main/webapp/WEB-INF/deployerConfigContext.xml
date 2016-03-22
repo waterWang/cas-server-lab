@@ -83,7 +83,6 @@
 		class="com.github.water.authentication.AcceptJdbcUsersAuthenticationHandler">
 		<property name="userInfoService" ref="userInfoService" />
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
-		<!-- <property name="passwordEncoder" ref="passwordEncoder" /> -->
 	</bean>
 	
 	<!-- 自定义加密方式（security的BCryptPasswordEncoder加密） -->
