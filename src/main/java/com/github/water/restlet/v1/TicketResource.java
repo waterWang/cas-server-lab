@@ -19,57 +19,71 @@ import org.springframework.web.bind.support.WebRequestDataBinder;
 
 import com.github.water.service.util.RestletWebRequest;
 
-public class TicketResource extends ServerResource
-{
-  private static final Logger LOGGER = LoggerFactory.getLogger(TicketResource.class);
+public class TicketResource extends ServerResource {
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(TicketResource.class);
 
-  @Autowired
-  private CentralAuthenticationService centralAuthenticationService;
+	@Autowired
+	private CentralAuthenticationService centralAuthenticationService;
 
-  public TicketResource() { setNegotiated(false); }
+	public TicketResource() {
+		setNegotiated(false);
+	}
 
-  @Post
-  public final void acceptRepresentation(Representation entity)
-  {
-    LOGGER.debug("Obtaining credentials...");
-    Credential c = obtainCredentials();
+	@Post
+	public final void acceptRepresentation(Representation entity) {
+		LOGGER.debug("Obtaining credentials...");
+		Credential c = obtainCredentials();
 
-    Formatter fmt = null;
-    try {
-      String ticketGrantingTicketId = this.centralAuthenticationService.createTicketGrantingTicket(new Credential[] { c });
-      getResponse().setStatus(determineStatus());
-      Reference ticketReference = getRequest().getResourceRef().addSegment(ticketGrantingTicketId);
-      getResponse().setLocationRef(ticketReference);
+		Formatter fmt = null;
+		try {
+			String ticketGrantingTicketId = this.centralAuthenticationService
+					.createTicketGrantingTicket(new Credential[] { c });
+			getResponse().setStatus(determineStatus());
+			Reference ticketReference = getRequest().getResourceRef()
+					.addSegment(ticketGrantingTicketId);
+			getResponse().setLocationRef(ticketReference);
 
-      fmt = new Formatter();
-      fmt.format("<!DOCTYPE HTML PUBLIC \\\"-//IETF//DTD HTML 2.0//EN\\\"><html><head><title>", new Object[0]);
+			fmt = new Formatter();
+			fmt.format(
+					"<!DOCTYPE HTML PUBLIC \\\"-//IETF//DTD HTML 2.0//EN\\\"><html><head><title>",
+					new Object[0]);
 
-      fmt.format("%s %s", new Object[] { Integer.valueOf(getResponse().getStatus().getCode()), getResponse().getStatus().getDescription() }).format("</title></head><body><h1>TGT Created</h1><form action=\"%s", new Object[] { ticketReference }).format("\" method=\"POST\">Service:<input type=\"text\" name=\"service\" value=\"\">", new Object[0]).format("<br><input type=\"submit\" value=\"Submit\"></form></body></html>", new Object[0]);
+			fmt.format(
+					"%s %s",
+					new Object[] {
+							Integer.valueOf(getResponse().getStatus().getCode()),
+							getResponse().getStatus().getDescription() })
+					.format("</title></head><body><h1>TGT Created</h1><form action=\"%s",
+							new Object[] { ticketReference })
+					.format("\" method=\"POST\">Service:<input type=\"text\" name=\"service\" value=\"\">",
+							new Object[0])
+					.format("<br><input type=\"submit\" value=\"Submit\"></form></body></html>",
+							new Object[0]);
 
-      getResponse().setEntity(fmt.toString(), MediaType.TEXT_HTML);
-    } catch (Exception e) {
-      LOGGER.error(e.getMessage(), e);
-      getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST, e.getMessage());
-    } finally {
-      IOUtils.closeQuietly(fmt);
-    }
-  }
+			getResponse().setEntity(fmt.toString(), MediaType.TEXT_HTML);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,
+					e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(fmt);
+		}
+	}
 
-  protected Status determineStatus()
-  {
-    return Status.SUCCESS_CREATED;
-  }
+	protected Status determineStatus() {
+		return Status.SUCCESS_CREATED;
+	}
 
-  protected Credential obtainCredentials() {
-    UsernamePasswordCredential c = new UsernamePasswordCredential();
-    WebRequestDataBinder binder = new WebRequestDataBinder(c);
-    RestletWebRequest webRequest = new RestletWebRequest(getRequest());
+	protected Credential obtainCredentials() {
+		UsernamePasswordCredential c = new UsernamePasswordCredential();
+		WebRequestDataBinder binder = new WebRequestDataBinder(c);
+		RestletWebRequest webRequest = new RestletWebRequest(getRequest());
 
-    webRequest.logFormRequest(new Form(getRequest().getEntity()));
-    binder.bind(webRequest);
+		webRequest.logFormRequest(new Form(getRequest().getEntity()));
+		binder.bind(webRequest);
 
-    return c;
-  }
+		return c;
+	}
 
- 
 }

@@ -40,8 +40,14 @@ public class AccountResource extends ServerResource {
 
 		Formatter fmt = null;
 		try {
-			userInfoService.cerateUser(userInfo);
-			getResponse().setStatus(determineStatus());
+			String result = userInfoService.cerateUser(userInfo);
+			if ("success".equals(result)) {
+				getResponse().setStatus(Status.SUCCESS_CREATED);
+			}
+			else {
+				getResponse().setStatus(new Status(new Status(400101010), result));
+			}
+			
 
 			fmt = new Formatter();
 			fmt.format(
@@ -53,7 +59,7 @@ public class AccountResource extends ServerResource {
 							Integer.valueOf(getResponse().getStatus().getCode()),
 							getResponse().getStatus().getDescription() })
 					.format("</title></head><body><h1>Account Created</h1><form action=\"%s",
-							new Object[] { userInfo.getLogin() + "is created" })
+							new Object[] { result })
 					.format("\" method=\"POST\">Service:<input type=\"text\" name=\"service\" value=\"\">",
 							new Object[0])
 					.format("<br></form></body></html>",
@@ -70,9 +76,9 @@ public class AccountResource extends ServerResource {
 		}
 	}
 
-	protected Status determineStatus() {
-		return Status.SUCCESS_CREATED;
-	}
+//	protected Status determineStatus() {
+//		return Status.SUCCESS_CREATED;
+//	}
 
 	protected UserInfo obtainCredentials() {
 		UserInfo userInfo = new UserInfo();
