@@ -22,43 +22,33 @@ public final class TestAccountResource {
 	}
 
 	private static String createAccount(String server, String login,
-			String password) {
+			String password,String email,String phoneNumber) {
 
 		notNull(server, "server must not be null");
 		notNull(login, "username must not be null");
 		notNull(password, "password must not be null");
-
+		String result = "";
 		final HttpClient client = new HttpClient();
 		final PostMethod post = new PostMethod(server);
 
 		post.setRequestBody(new NameValuePair[] {
 				new NameValuePair("login", login),
-				new NameValuePair("password", password) });
-
+				new NameValuePair("password", password),
+				new NameValuePair("email", email),
+				new NameValuePair("phone_number", phoneNumber)});
 		try {
 			client.executeMethod(post);
-			final String response = post.getResponseBodyAsString();
-			LOG.info(response);
-			switch (post.getStatusCode()) {
-			case 201: {
-				final Matcher matcher = Pattern.compile(
-						".*action=\".*/(.*?)\".*").matcher(response);
-				if (matcher.matches())
-					return matcher.group(1);
-				LOG.info("the account being created Successful !");
-				break;
-			}
-			default:
-				LOG.info("Invalid response code (" + post.getStatusCode()
-						+ ") from DlCAS server!");
-				break;
+			if (post.getStatusCode() == 201) {
+				result =  "the account being created Successful !";
+			}else {
+				result = "the "+login +" already exists!";
 			}
 		} catch (final IOException e) {
 			LOG.warning(e.getMessage());
 		} finally {
 			post.releaseConnection();
 		}
-		return null;
+		return result;
 	}
 
 	private static void notNull(final Object object, final String message) {
@@ -69,9 +59,11 @@ public final class TestAccountResource {
 	public static void main(final String[] args) {
 		// API 地址
 		final String server = "https://wangweiwei:8443/cas/v1/accounts";
-		final String login = "user@localhost";
-		final String password = "user";
+		final String login = "3";
+		final String password = "4";
+		final String email = "5";
+		final String phoneNumber = "6";
 
-		LOG.info(createAccount(server, login, password));
+		LOG.info(createAccount(server, login, password,email,phoneNumber));
 	}
 }
