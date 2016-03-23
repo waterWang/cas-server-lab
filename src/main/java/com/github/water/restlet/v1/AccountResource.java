@@ -59,7 +59,7 @@ public class AccountResource extends ServerResource {
 					.format("</title></head><body><h1>Account Created</h1><form action=\"%s",
 							new Object[] { result })
 					.format("\" method=\"POST\">Service:<input type=\"text\" name=\"service\" value=\"\">",
-							new Object[0])
+							new Object[] {result})
 					.format("<br></form></body></html>",
 							new Object[0]);
 			
@@ -74,9 +74,6 @@ public class AccountResource extends ServerResource {
 		}
 	}
 
-//	protected Status determineStatus() {
-//		return Status.SUCCESS_CREATED;
-//	}
 
 	protected UserInfo obtainCredentials() {
 		UserInfo userInfo = new UserInfo();
