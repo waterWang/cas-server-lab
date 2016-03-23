@@ -47,8 +47,6 @@ public class AccountResource extends ServerResource {
 			else {
 				getResponse().setStatus(new Status(new Status(400101010), result));
 			}
-			
-
 			fmt = new Formatter();
 			fmt.format(
 					"<!DOCTYPE HTML PUBLIC \\\"-//IETF//DTD HTML 2.0//EN\\\"><html><head><title>",

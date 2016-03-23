@@ -47,7 +47,7 @@ public class UserInfoService {
 			UserInfo user = loadUserInfo(userInfo.getLogin());
 			if (user == null) {
 				jdbcTemplate.update(DEFAULT_CREATE_STATEMENT,
-						new Object[] { userInfo.getLogin(), pwd, 1,
+						new Object[] { userInfo.getLogin(), pwd, 0,
 								userInfo.getLogin(), df.format(new Date()) });
 				return "success";
 			}

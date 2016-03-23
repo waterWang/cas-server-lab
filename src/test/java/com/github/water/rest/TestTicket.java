@@ -45,8 +45,8 @@ public class TestTicket {
 	}
 
 	public static void main(final String[] args) throws Exception {
-		String serviceTicket = "ST-52-F9MoJHAfGi0dYKOdSOgp-cas01.example.org";
-		final String service = "http://172.16.40.40:8080/j_spring_cas_security_check";
+		String serviceTicket = "ST-9-rPOE5vnTaJze2bRfv6Wi-cas01.example.org";
+		final String service = "http://172.16.40.85:9000/j_spring_cas_security_check";
 		final String proxyValidate = "https://wangweiwei:8443/cas/proxyValidate";
 
 		ticketValidate(proxyValidate, serviceTicket, service);
