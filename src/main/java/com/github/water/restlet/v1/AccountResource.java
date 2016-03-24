@@ -1,6 +1,7 @@
 package com.github.water.restlet.v1;
 
 import java.util.Formatter;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
@@ -37,15 +38,15 @@ public class AccountResource extends ServerResource {
 	@Post
 	public final void acceptRepresentation(Representation entity) {
 		UserInfo userInfo = obtainCredentials();
-
 		Formatter fmt = null;
 		try {
-			String result = userInfoService.cerateUser(userInfo);
-			if ("success".equals(result)) {
+			Map<String, Object> result = userInfoService.cerateUser(userInfo);
+			String message = result.get("message").toString();
+			if ("success".equals(message)) {
 				getResponse().setStatus(Status.SUCCESS_CREATED);
 			}
 			else {
-				getResponse().setStatus(new Status(new Status(400101010), result));
+				getResponse().setStatus(new Status(new Status(400101010), message));
 			}
 			fmt = new Formatter();
 			fmt.format(
@@ -57,12 +58,12 @@ public class AccountResource extends ServerResource {
 							Integer.valueOf(getResponse().getStatus().getCode()),
 							getResponse().getStatus().getDescription() })
 					.format("</title></head><body><h1>Account Created</h1><form action=\"%s",
-							new Object[] { result })
+							new Object[] { result.get("userId") })
 					.format("\" method=\"POST\">Service:<input type=\"text\" name=\"service\" value=\"\">",
-							new Object[] {result})
+							new Object[] {result.get("userId")})
 					.format("<br></form></body></html>",
-							new Object[0]);
-			
+							new Object[] {result.get("userId")});
+//			fmt.format("",new Object[] { result.get("userId") });
 			getResponse().setEntity(fmt.toString(), MediaType.TEXT_HTML);
 			LOGGER.info(getResponse().getEntityAsText());
 		} catch (Exception e) {

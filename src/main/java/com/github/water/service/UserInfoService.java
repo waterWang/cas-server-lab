@@ -4,7 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +41,9 @@ public class UserInfoService {
 		return null;
 	}
 
-	public String cerateUser(UserInfo userInfo) {
+	public Map<String, Object> cerateUser(UserInfo userInfo) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
 		String pwd = myPasswordEncoder.encode(userInfo.getPassword());
 		// 检测数据库中是否已经存在改注册的用户
@@ -50,9 +54,14 @@ public class UserInfoService {
 					new Object[] { userInfo.getLogin(), pwd, 0,
 							userInfo.getLogin(), df.format(new Date()),
 							userInfo.getEmail(), userInfo.getPhone_number() });
-			return "success";
+			user = loadUserInfo(userInfo.getLogin());
+			result.put("message", "success");
+			result.put("userId", user.getId());
+			return result;
 		}
-		return "the " + userInfo.getLogin() + " already exists!";
+		result.put("message", "the " + userInfo.getLogin() + " already exists!");
+		result.put("userId", null);
+		return result;
 	}
 
 	private final class UserInfoRowMapper implements RowMapper<UserInfo> {
