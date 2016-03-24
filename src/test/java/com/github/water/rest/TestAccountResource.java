@@ -6,8 +6,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpConstants;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 
 /*
  * 测试rest方式插入用户
@@ -22,7 +26,7 @@ public final class TestAccountResource {
 	}
 
 	private static String createAccount(String server, String login,
-			String password,String email,String phoneNumber) {
+			String password, String email, String phoneNumber) {
 
 		notNull(server, "server must not be null");
 		notNull(login, "username must not be null");
@@ -35,18 +39,47 @@ public final class TestAccountResource {
 				new NameValuePair("login", login),
 				new NameValuePair("password", password),
 				new NameValuePair("email", email),
-				new NameValuePair("phone_number", phoneNumber)});
+				new NameValuePair("phone_number", phoneNumber) });
 		try {
 			client.executeMethod(post);
 			if (post.getStatusCode() == 201) {
-				result =  "the account being created Successful !";
-			}else {
-				result = "the "+login +" already exists!";
+				result = "the account being created Successful !";
+			} else {
+				result = "the " + login + " already exists!";
 			}
 		} catch (final IOException e) {
 			LOG.warning(e.getMessage());
 		} finally {
 			post.releaseConnection();
+		}
+		return result;
+	}
+
+	private static String updatePwd(String server, String password, Long userId) {
+
+		notNull(server, "server must not be null");
+		notNull(password, "password must not be null");
+		notNull(userId, "userId must not be null");
+
+		String result = "";
+		final HttpClient htpClient = new HttpClient();
+		final PutMethod putMethod = new PutMethod(server);
+
+		putMethod.addRequestHeader("Content-Type", "application/json");
+		putMethod.getParams().setParameter("password", password);
+		putMethod.getParams().setParameter("userId", password);
+		try {
+			int statusCode = htpClient.executeMethod(putMethod);
+			if (statusCode != HttpStatus.SC_OK) {
+				LOG.info("Method failed: " + putMethod.getStatusLine());
+				return null;
+			}
+			String responseBody = putMethod.getResponseBody().toString();
+			result = "";
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			putMethod.releaseConnection();
 		}
 		return result;
 	}
@@ -59,11 +92,14 @@ public final class TestAccountResource {
 	public static void main(final String[] args) {
 		// API 地址
 		final String server = "https://wangweiwei:8443/cas/v1/accounts";
-		final String login = "3";
+//		final String login = "3";
+//		final String password = "4";
+//		final String email = "5";
+//		final String phoneNumber = "6";
+//		LOG.info(createAccount(server, login, password, email, phoneNumber));
+		
 		final String password = "4";
-		final String email = "5";
-		final String phoneNumber = "6";
-
-		LOG.info(createAccount(server, login, password,email,phoneNumber));
+		final Long userId = 4530L;
+		LOG.info(updatePwd(server,  password, userId));
 	}
 }

@@ -29,6 +29,21 @@ public class UserInfoService {
 
 	private final String DEFAULT_SELECT_STATEMENT = "select * from jhi_user where lower(login) = ? or phone_number = ? or lower(email) = ?";
 	private final String DEFAULT_CREATE_STATEMENT = "INSERT INTO jhi_user (login,password,activated,created_by,created_date,email,phone_number) VALUES(?,?,?,?,?,?,?)";
+	private final String DEFAULT_UPDATE_STATEMENT = "update jhi_user set password = ? where id = ?";
+
+	public String updatePwd(String newPwd, Long userId) {
+		int isExist = jdbcTemplate.update("select * form jhi_user where id = ", new Object[] { userId });
+		if (isExist <= 0) {
+			return "the account is not exist";
+		}
+		else {
+			String pwd = myPasswordEncoder.encode(newPwd);
+			jdbcTemplate.update(DEFAULT_UPDATE_STATEMENT, new Object[] { pwd,
+					userId });
+			return "success";
+		}
+		
+	}
 
 	public UserInfo loadUserInfo(String username) {
 		List<UserInfo> listUserInfo = jdbcTemplate.query(
@@ -43,7 +58,7 @@ public class UserInfoService {
 
 	public Map<String, Object> cerateUser(UserInfo userInfo) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		
+
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
 		String pwd = myPasswordEncoder.encode(userInfo.getPassword());
 		// 检测数据库中是否已经存在改注册的用户
