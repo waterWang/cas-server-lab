@@ -10,10 +10,14 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.restlet.resource.Delete;
 import org.restlet.resource.Post;
+import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.support.WebRequestDataBinder;
 
 import com.github.water.domain.UserInfo;
@@ -34,10 +38,54 @@ public class AccountResource extends ServerResource {
 	public AccountResource() {
 		setNegotiated(false);
 	}
-
+	
+	@Put
+	public String removeRepresentations(String newPwd, Long userId) {
+		UserInfo userInfo = obtainCredentials();
+		userInfo.setEmail("".equals(userInfo.getEmail())?null:userInfo.getEmail());
+		userInfo.setPhone_number("".equals(userInfo.getPhone_number())?null:userInfo.getPhone_number());
+		Formatter fmt = null;
+		try {
+			String result = userInfoService.updatePwd(userInfo.getPassword(), userInfo.getId());
+//			String message = result.get("message").toString();
+			if ("success".equals(result)) {
+				getResponse().setStatus(Status.SUCCESS_CREATED);
+			}
+			else {
+				getResponse().setStatus(new Status(new Status(400101010), result));
+			}
+			fmt = new Formatter();
+			fmt.format(
+					"<!DOCTYPE HTML PUBLIC \\\"-//IETF//DTD HTML 2.0//EN\\\"><html><head><title>",
+					new Object[0]);
+			fmt.format(
+					"%s %s",
+					new Object[] {
+							Integer.valueOf(getResponse().getStatus().getCode()),
+							getResponse().getStatus().getDescription() })
+					.format("</title></head><body><h1>Account Created</h1><form action=\"%s",
+							new Object[] { "/"+result })
+					.format("\" method=\"POST\">Service:<input type=\"text\" name=\"service\" value=\"\">",
+							new Object[] { "/" + result})
+					.format("<br></form></body></html>",
+							new Object[] {result});
+			getResponse().setEntity(fmt.toString(), MediaType.TEXT_HTML);
+			LOGGER.info(getResponse().getEntityAsText());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST,
+					e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(fmt);
+		}
+		return null;
+	}
+	
 	@Post
 	public final void acceptRepresentation(Representation entity) {
 		UserInfo userInfo = obtainCredentials();
+		userInfo.setEmail("".equals(userInfo.getEmail())?null:userInfo.getEmail());
+		userInfo.setPhone_number("".equals(userInfo.getPhone_number())?null:userInfo.getPhone_number());
 		Formatter fmt = null;
 		try {
 			Map<String, Object> result = userInfoService.cerateUser(userInfo);
@@ -58,12 +106,11 @@ public class AccountResource extends ServerResource {
 							Integer.valueOf(getResponse().getStatus().getCode()),
 							getResponse().getStatus().getDescription() })
 					.format("</title></head><body><h1>Account Created</h1><form action=\"%s",
-							new Object[] { result.get("userId") })
+							new Object[] { "/"+result.get("userId") })
 					.format("\" method=\"POST\">Service:<input type=\"text\" name=\"service\" value=\"\">",
-							new Object[] {result.get("userId")})
+							new Object[] { "/" + message})
 					.format("<br></form></body></html>",
 							new Object[] {result.get("userId")});
-//			fmt.format("",new Object[] { result.get("userId") });
 			getResponse().setEntity(fmt.toString(), MediaType.TEXT_HTML);
 			LOGGER.info(getResponse().getEntityAsText());
 		} catch (Exception e) {

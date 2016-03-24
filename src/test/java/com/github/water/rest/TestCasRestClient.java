@@ -169,21 +169,21 @@ public final class TestCasRestClient {
 		// cas server的地址，http或者https都可以
 		final String server = "https://wangweiwei:8443/cas/v1/tickets";
 		// 现在使用邮箱、手机登录
-//		 String username = "user@localhost";
-//		 String password = "user";
-//		 String service = "http://172.16.40.85:9000/j_spring_cas_security_check";
-//
-//		String ticketGrantingTicket = getTicketGrantingTicket(server, username,
-//				password);
-//		String serviceTicket = getServiceTicket(server, ticketGrantingTicket,
-//				service);
-//
-//		System.out.println("TGT-------" + ticketGrantingTicket);
-//		System.out.println("ST-------" + serviceTicket);
+		 String username = "user@localhost";
+		 String password = "user";
+		 String service = "http://172.16.40.40:8080/j_spring_cas_security_check";
+
+		String ticketGrantingTicket = getTicketGrantingTicket(server, username,
+				password);
+		String serviceTicket = getServiceTicket(server, ticketGrantingTicket,
+				service);
+
+		System.out.println("TGT-------" + ticketGrantingTicket);
+		System.out.println("ST-------" + serviceTicket);
 		// 浏览器上输入 service?ticket=上面获取的ST 即可登录
 		
-		String logoutResult = logout(server , "TGT-2-TntP4pn1rQAowRKVlW7DuofZbQhxNOxsGhMjBRtmCxL7xhaRgD-cas01.example.org");
-		System.out.println("logoutResult-------" + logoutResult);
+//		String logoutResult = logout(server , "TGT-2-TntP4pn1rQAowRKVlW7DuofZbQhxNOxsGhMjBRtmCxL7xhaRgD-cas01.example.org");
+//		System.out.println("logoutResult-------" + logoutResult);
 
 	}
 }

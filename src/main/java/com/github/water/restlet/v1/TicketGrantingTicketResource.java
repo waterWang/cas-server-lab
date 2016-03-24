@@ -49,7 +49,7 @@ public final class TicketGrantingTicketResource extends ServerResource {
 			String serviceTicketId = this.centralAuthenticationService
 					.grantServiceTicket(this.ticketGrantingTicketId,
 							new SimpleWebApplicationServiceImpl(serviceUrl));
-
+			System.out.println("**************"+ serviceTicketId);
 			getResponse().setEntity(serviceTicketId, MediaType.TEXT_PLAIN);
 		} catch (InvalidTicketException e) {
 			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND,
