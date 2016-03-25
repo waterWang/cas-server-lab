@@ -43,7 +43,7 @@
 	</util:map>
 
 	<bean id="accountResource" class="com.github.water.restlet.v1.AccountResource"
-		scope="prototype" >
+		scope="prototype">
 		<property name="userInfoService" ref="userInfoService" />
 	</bean>
 
