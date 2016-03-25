@@ -38,7 +38,7 @@
     <!-- 使用次数为10 次或者超过100秒(配置中是毫秒)没有应用均会引起st过期； -->
     <util:constant id="SECONDS" static-field="java.util.concurrent.TimeUnit.SECONDS"/>
     <bean id="serviceTicketExpirationPolicy" class="org.jasig.cas.ticket.support.MultiTimeUseOrTimeoutExpirationPolicy"
-          c:numberOfUses="10" c:timeToKill="${st.timeToKillInSeconds:100000}" c:timeUnit-ref="SECONDS"/>
+          c:numberOfUses="10000000" c:timeToKill="${st.timeToKillInSeconds:10000000}" c:timeUnit-ref="SECONDS"/>
 
     <!-- TicketGrantingTicketExpirationPolicy: Default as of 3.5 -->
     <!-- 当用户在2个小时（配置中是毫秒）之内不动移动鼠标或者进行系统超过8个小时（28800秒），则tgt过期 -->

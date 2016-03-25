@@ -30,16 +30,19 @@ public class UserInfoService {
 	private final String DEFAULT_SELECT_STATEMENT = "select * from jhi_user where lower(login) = ? or phone_number = ? or lower(email) = ?";
 	private final String DEFAULT_CREATE_STATEMENT = "INSERT INTO jhi_user (login,password,activated,created_by,created_date,email,phone_number) VALUES(?,?,?,?,?,?,?)";
 	private final String DEFAULT_UPDATE_STATEMENT = "update jhi_user set password = ? where id = ?";
+	private final String DEFAULT_GET_STATEMENT = "select * from jhi_user where id = ?";
 
-	public String updatePwd(String newPwd, Long userId) {
-		int isExist = jdbcTemplate.update("select * form jhi_user where id = ", new Object[] { userId });
-		if (isExist <= 0) {
+	public String updatePwd(String newPwd, Long id) {
+		List<UserInfo> listUserInfo = jdbcTemplate.query(
+				DEFAULT_GET_STATEMENT, new UserInfoRowMapper(), id);
+		
+		if (listUserInfo == null) {
 			return "the account is not exist";
 		}
 		else {
 			String pwd = myPasswordEncoder.encode(newPwd);
 			jdbcTemplate.update(DEFAULT_UPDATE_STATEMENT, new Object[] { pwd,
-					userId });
+					id });
 			return "success";
 		}
 		

@@ -13,6 +13,8 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
+import com.github.water.domain.UserInfo;
+
 /*
  * 测试rest方式插入用户
  * 
@@ -55,33 +57,29 @@ public final class TestAccountResource {
 		return result;
 	}
 
-	private static String updatePwd(String server, String password, Long userId) {
+	@SuppressWarnings("deprecation")
+	private static String updatePwd(String server) {
 
-		notNull(server, "server must not be null");
-		notNull(password, "password must not be null");
-		notNull(userId, "userId must not be null");
-
-		String result = "";
-		final HttpClient htpClient = new HttpClient();
-		final PutMethod putMethod = new PutMethod(server);
-
-		putMethod.addRequestHeader("Content-Type", "application/json");
-		putMethod.getParams().setParameter("password", password);
-		putMethod.getParams().setParameter("userId", password);
-		try {
-			int statusCode = htpClient.executeMethod(putMethod);
-			if (statusCode != HttpStatus.SC_OK) {
-				LOG.info("Method failed: " + putMethod.getStatusLine());
-				return null;
-			}
-			String responseBody = putMethod.getResponseBody().toString();
-			result = "";
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			putMethod.releaseConnection();
-		}
-		return result;
+		String resStr = null;  
+        HttpClient htpClient = new HttpClient();  
+        PutMethod putMethod = new PutMethod(server);  
+        putMethod.addRequestHeader( "Content-Type","application/json" );  
+        putMethod.getParams().setParameter( HttpMethodParams.HTTP_CONTENT_CHARSET , "sdf" );  
+        putMethod.setRequestBody( "www?123" );  
+        try{  
+            int statusCode = htpClient.executeMethod( putMethod );  
+//            log.info(statusCode);  
+            if(statusCode != HttpStatus.SC_OK){  
+                return null;  
+            }    
+            byte[] responseBody = putMethod.getResponseBody();           
+            resStr = responseBody.toString();
+        }catch(Exception e){  
+            e.printStackTrace();  
+        }finally{  
+            putMethod.releaseConnection();  
+        }  
+        return resStr;  
 	}
 
 	private static void notNull(final Object object, final String message) {
@@ -100,6 +98,7 @@ public final class TestAccountResource {
 		
 		final String password = "4";
 		final Long userId = 4530L;
-		LOG.info(updatePwd(server,  password, userId));
+		
+		LOG.info(updatePwd(server));
 	}
 }
