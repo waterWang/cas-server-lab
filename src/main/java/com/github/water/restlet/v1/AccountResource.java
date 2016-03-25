@@ -10,14 +10,11 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Delete;
 import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.support.WebRequestDataBinder;
 
 import com.github.water.domain.UserInfo;
@@ -40,36 +37,21 @@ public class AccountResource extends ServerResource {
 	}
 	
 	@Put
-	public String removeRepresentations(String newPwd, Long userId) {
-		UserInfo userInfo = obtainCredentials();
-		userInfo.setEmail("".equals(userInfo.getEmail())?null:userInfo.getEmail());
-		userInfo.setPhone_number("".equals(userInfo.getPhone_number())?null:userInfo.getPhone_number());
-		Formatter fmt = null;
+	public String putRepresentations(String param) {
+		String result = null ;
+		String newPwd = param.split("[?]")[0];
+		Long userId = Long.parseLong(param.split("[?]")[1]);
+		Formatter fmt = new Formatter();
 		try {
-			String result = userInfoService.updatePwd(userInfo.getPassword(), userInfo.getId());
-//			String message = result.get("message").toString();
+			result = userInfoService.updatePwd(newPwd , userId);
 			if ("success".equals(result)) {
 				getResponse().setStatus(Status.SUCCESS_CREATED);
 			}
 			else {
 				getResponse().setStatus(new Status(new Status(400101010), result));
 			}
-			fmt = new Formatter();
-			fmt.format(
-					"<!DOCTYPE HTML PUBLIC \\\"-//IETF//DTD HTML 2.0//EN\\\"><html><head><title>",
-					new Object[0]);
-			fmt.format(
-					"%s %s",
-					new Object[] {
-							Integer.valueOf(getResponse().getStatus().getCode()),
-							getResponse().getStatus().getDescription() })
-					.format("</title></head><body><h1>Account Created</h1><form action=\"%s",
-							new Object[] { "/"+result })
-					.format("\" method=\"POST\">Service:<input type=\"text\" name=\"service\" value=\"\">",
-							new Object[] { "/" + result})
-					.format("<br></form></body></html>",
-							new Object[] {result});
-			getResponse().setEntity(fmt.toString(), MediaType.TEXT_HTML);
+			getResponse().setEntity(result, MediaType.TEXT_HTML);
+			System.out.println("&&&&&&&&&&&"+ getResponse().getEntityAsText());
 			LOGGER.info(getResponse().getEntityAsText());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -78,7 +60,7 @@ public class AccountResource extends ServerResource {
 		} finally {
 			IOUtils.closeQuietly(fmt);
 		}
-		return null;
+		return result;
 	}
 	
 	@Post

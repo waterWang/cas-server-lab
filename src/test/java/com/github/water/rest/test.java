@@ -1,6 +1,6 @@
 /**
 * @author weiwei.Wang
-* @date 2016年3月23日 
+* @date 2016年3月25日 
 * @todo TODO
 */ 
 package com.github.water.rest; 
@@ -10,25 +10,13 @@ package com.github.water.rest;
  *
  */
 public class test {
-
-	/**
-	 * @param args
-	 */
+	
 	public static void main(String[] args) {
-//		String regxpForEmbedTag = "<\\s*embed\\s+([^>]*)\\s*/>";
-//		Pattern pattern = Pattern.compile(regxpForEmbedTag);
-//		
-//		String content="<embed height=\'400\ width=\"480\" autostart=\"false\" src=\"http://localhost:8080/uploadFile/test.mp4\"/>";
-//		Matcher matcher = pattern.matcher(content);
-//		
-//		String regxpForWidth = "width=\"([^\"]+)\"";
-//		Matcher matcherForWidth = Pattern.compile(regxpForWidth).matcher(embedStr);
-//		if (matcherForWidth.find()){
-//		    StringBuffer temp = new StringBuffer();
-//		    matcher.appendReplacement(temp, "width=\"100%\"");
-//		    matcher.appendTail(temp);
-//		}
+		String str = "www?123";
+		String[] str1 = str.split("[?]");
+		for (int i = 0; i < str1.length; i++) {
+			System.out.println(str1[i]);
+		}
 	}
-
 }
  
