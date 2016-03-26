@@ -14,7 +14,7 @@
 ### 当前版本 v0.0.0.5
 
 - [x] [REST API方式注册用户](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.5)   
- 
+- [x] [REST API方式修改密码](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.5) 
 
 
 ## 意见反馈
