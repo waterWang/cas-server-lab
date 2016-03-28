@@ -28,3 +28,4 @@
 ## 参考文献
 1.  CAS 官网：<http://www.jasig.org/cas>
 2.  CAS Document API：<http://jasig.github.io/cas/4.0.x/index.html>
+3.  集成REST：<http://denger.iteye.com/blog/973068>
