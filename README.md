@@ -17,7 +17,7 @@
 - [x] [REST API方式修改密码](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.5)
 - [x] [REST API方式获取用户信息](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.5) 
 - [x] [REST API方式logout](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.5) 
-1234
+1234333
 
 ## 意见反馈
 欢迎大家随时提交反馈意见及功能需求，或fork之后new pull request，本人会及时对问题进行回复，[请戳我提交issue。](https://github.com/waterWang/cas-server-lab/issues/new)
