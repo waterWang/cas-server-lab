@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Licensed to Jasig under one or more contributor license agreements. 
-	See the NOTICE file distributed with this work for additional information 
-	regarding copyright ownership. Jasig licenses this file to you under the 
-	Apache License, Version 2.0 (the "License"); you may not use this file except 
-	in compliance with the License. You may obtain a copy of the License at the 
-	following location: http://www.apache.org/licenses/LICENSE-2.0 Unless required 
-	by applicable law or agreed to in writing, software distributed under the 
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-	OF ANY KIND, either express or implied. See the License for the specific 
-	language governing permissions and limitations under the License. -->
 <!-- | deployerConfigContext.xml centralizes into one file some of the declarative 
 	configuration that | all CAS deployers will need to modify. | | This file 
 	declares some of the Spring-managed JavaBeans that make up a CAS deployment. 
@@ -21,121 +11,33 @@
 	for authenticating usernames and passwords. + -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:c="http://www.springframework.org/schema/c" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:util="http://www.springframework.org/schema/util" xmlns:sec="http://www.springframework.org/schema/security"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
-       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<!-- | The authentication manager defines security policy for authentication 
-		by specifying at a minimum | the authentication handlers that will be used 
-		to authenticate credential. While the AuthenticationManager | interface supports 
-		plugging in another implementation, the default PolicyBasedAuthenticationManager 
-		should | be sufficient in most cases. + -->
-	<bean id="authenticationManager"
-		class="org.jasig.cas.authentication.PolicyBasedAuthenticationManager">
-		<constructor-arg>
-			<map>
-				<!-- | IMPORTANT | Every handler requires a unique name. | If more than 
-					one instance of the same handler class is configured, you must explicitly 
-					| set its name to something other than its default name (typically the simple 
-					class name). -->
-				<entry key-ref="proxyAuthenticationHandler" value-ref="proxyPrincipalResolver" />
-				<entry key-ref="primaryAuthenticationHandler" value-ref="primaryPrincipalResolver" />
-			</map>
-		</constructor-arg>
 
-		<!-- Uncomment the metadata populator to allow clearpass to capture and 
-			cache the password This switch effectively will turn on clearpass. <property 
-			name="authenticationMetaDataPopulators"> <util:list> <bean class="org.jasig.cas.extension.clearpass.CacheCredentialsMetaDataPopulator" 
-			c:credentialCache-ref="encryptedMap" /> </util:list> </property> -->
+	<util:map id="authenticationHandlersResolvers">
+		<entry key-ref="proxyAuthenticationHandler" value-ref="proxyPrincipalResolver" />
+		<entry key-ref="primaryAuthenticationHandler" value-ref="primaryPrincipalResolver" />
+	</util:map>
 
-		<!-- | Defines the security policy around authentication. Some alternative 
-			policies that ship with CAS: | | * NotPreventedAuthenticationPolicy - all 
-			credential must either pass or fail authentication | * AllAuthenticationPolicy 
-			- all presented credential must be authenticated successfully | * RequiredHandlerAuthenticationPolicy 
-			- specifies a handler that must authenticate its credential to pass -->
-		<property name="authenticationPolicy">
-			<bean class="org.jasig.cas.authentication.AnyAuthenticationPolicy" />
-		</property>
-	</bean>
+	<util:list id="authenticationMetadataPopulators">
+		<ref bean="successfulHandlerMetaDataPopulator" />
+		<ref bean="rememberMeAuthenticationMetaDataPopulator" />
+	</util:list>
 
-	<!-- Required for proxy ticket mechanism. -->
-	<bean id="proxyAuthenticationHandler"
-		class="org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler"
-		p:httpClient-ref="httpClient" />
-
-	<!-- | TODO: Replace this component with one suitable for your enviroment. 
-		| | This component provides authentication for the kind of credential used 
-		in your environment. In most cases | credential is a username/password pair 
-		that lives in a system of record like an LDAP directory. | The most common 
-		authentication handler beans: | | * org.jasig.cas.authentication.LdapAuthenticationHandler 
-		| * org.jasig.cas.adaptors.jdbc.QueryDatabaseAuthenticationHandler | * org.jasig.cas.adaptors.x509.authentication.handler.support.X509CredentialsAuthenticationHandler 
-		| * org.jasig.cas.support.spnego.authentication.handler.support.JCIFSSpnegoAuthenticationHandler -->
-	<!-- <bean id="primaryAuthenticationHandler" class="org.jasig.cas.authentication.AcceptUsersAuthenticationHandler"> 
-		<property name="users"> <map> <entry key="admin" value="admin"/> </map> </property> 
-		</bean> -->
-
-	<!-- 修改验证方式 -->
-	<bean id="primaryAuthenticationHandler"
-		class="com.github.water.authentication.AcceptJdbcUsersAuthenticationHandler">
-		<property name="userInfoService" ref="userInfoService" />
-		<property name="jdbcTemplate" ref="jdbcTemplate" />
-	</bean>
-	
-	<!-- 自定义加密方式（security的BCryptPasswordEncoder加密） -->
-			<bean id="myPasswordEncoder" class="com.github.water.conf.MyPasswordEncoder">
-			</bean>
-
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-		<property name="dataSource">
-			<!-- HikariCP 高性能数据库连接池 -->
-			<bean id="dataSourceHikari" class="com.zaxxer.hikari.HikariDataSource"
-				destroy-method="shutdown">
-				<constructor-arg>
-					<bean class="com.zaxxer.hikari.HikariConfig">
-					<property name="driverClassName" value="${db.driverClassName}"/>
-					<property name="jdbcUrl" value="${db.jdbcUrl}"/>
-					<property name="username" value="${db.username}"/>
-					<property name="password" value="${db.password}"/>
-					<property name="connectionTimeout" value="${db.connectionTimeout}"/>
-					<property name="idleTimeout" value="${db.idleTimeout}"/>
-					<property name="maxLifetime" value="${db.maxLifetime}"/>
-					<property name="maximumPoolSize" value="${db.maximumPoolSize}"/>
-					<property name="minimumIdle" value="${db.minimumIdle}"/>
-					</bean>
-				</constructor-arg>
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="userInfoService" class="com.github.water.service.UserInfoService">
-		<property name="jdbcTemplate" ref="jdbcTemplate" />
-		<property name="myPasswordEncoder" ref="myPasswordEncoder" />
-	</bean>
-
-	<!-- Required for proxy ticket mechanism -->
-	<bean id="proxyPrincipalResolver"
-		class="org.jasig.cas.authentication.principal.BasicPrincipalResolver" />
-
-	<!-- | Resolves a principal from a credential using an attribute repository 
-		that is configured to resolve | against a deployer-specific store (e.g. LDAP). -->
-	<bean id="primaryPrincipalResolver"
-		class="org.jasig.cas.authentication.principal.PersonDirectoryPrincipalResolver">
-		<property name="attributeRepository" ref="attributeRepository" />
-	</bean>
-
-	<!-- Bean that defines the attributes that a service may return. This example 
-		uses the Stub/Mock version. A real implementation may go against a database 
-		or LDAP server. The id should remain "attributeRepository" though. + -->
 	<!-- 修改前 -->
-	<!-- <bean id="attributeRepository" class="org.jasig.services.persondir.support.StubPersonAttributeDao" 
-		p:backingMap-ref="attrRepoBackingMap" /> <util:map id="attrRepoBackingMap"> 
-		<entry key="uid" value="uid" /> <entry key="eduPersonAffiliation" value="eduPersonAffiliation" 
-		/> <entry key="groupMembership" value="groupMembership" /> </util:map> -->
+	<!-- <bean id="attributeRepository" class="org.jasig.services.persondir.support.NamedStubPersonAttributeDao" 
+		p:backingMap-ref="attrRepoBackingMap" /> -->
 	<!-- 修改前 end -->
+
 	<!--修改后 返回更多user信息 -->
 	<bean id="attributeRepository"
 		class="com.github.water.service.persondir.support.AccoutAttributeDao">
@@ -143,43 +45,135 @@
 	</bean>
 	<!--修改后 end -->
 
-	<!-- Sample, in-memory data store for the ServiceRegistry. A real implementation 
-		would probably want to replace this with the JPA-backed ServiceRegistry DAO 
-		The name of this bean should remain "serviceRegistryDao". + -->
-	<bean id="serviceRegistryDao" class="org.jasig.cas.services.InMemoryServiceRegistryDaoImpl"
-		p:registeredServices-ref="registeredServicesList" />
+	<alias name="acceptUsersAuthenticationHandler" alias="primaryAuthenticationHandler" />
 
-	<util:list id="registeredServicesList">
-		<bean class="org.jasig.cas.services.RegexRegisteredService" p:id="0"
-			p:name="HTTP and IMAP" p:description="Allows HTTP(S) and IMAP(S) protocols"
-			p:serviceId="^(https?|imaps?)://.*" p:evaluationOrder="10000001" />
-		<!-- Use the following definition instead of the above to further restrict 
-			access to services within your domain (including sub domains). Note that 
-			example.com must be replaced with the domain you wish to permit. This example 
-			also demonstrates the configuration of an attribute filter that only allows 
-			for attributes whose length is 3. -->
-		<!-- <bean class="org.jasig.cas.services.RegexRegisteredService"> <property 
-			name="id" value="1" /> <property name="name" value="HTTP and IMAP on example.com" 
-			/> <property name="description" value="Allows HTTP(S) and IMAP(S) protocols 
-			on example.com" /> <property name="serviceId" value="^(https?|imaps?)://([A-Za-z0-9_-]+\.)*example\.com/.*" 
-			/> <property name="evaluationOrder" value="0" /> <property name="attributeFilter"> 
-			<bean class="org.jasig.cas.services.support.RegisteredServiceRegexAttributeFilter" 
-			c:regex="^\w{3}$" /> </property> </bean> -->
-	</util:list>
+	<!-- 修改验证方式 -->
+	<bean id="acceptUsersAuthenticationHandler"
+		class="com.github.water.authentication.AcceptJdbcUsersAuthenticationHandler">
+		<property name="userInfoService" ref="userInfoService" />
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="passwordEncoder">
+			<!-- 自定义加密方式（security的BCryptPasswordEncoder加密） -->
+			<bean id="passwordEncoder" class="com.github.water.conf.MyPasswordEncoder">
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+
+	</bean>
+
+	<bean id="userInfoService" class="com.github.water.service.UserInfoService">
+		<!-- <constructor-arg index="0" ref="jdbcTemplate" /> -->
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+
+	<!-- HikariCP 高性能数据库连接池 -->
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="shutdown">
+		<constructor-arg>
+			<bean class="com.zaxxer.hikari.HikariConfig">
+				<property name="driverClassName" value="${db.driverClassName}" />
+				<property name="jdbcUrl" value="${db.jdbcUrl}" />
+				<property name="username" value="${db.username}" />
+				<property name="password" value="${db.password}" />
+				<property name="connectionTimeout" value="${db.connectionTimeout}" />
+				<property name="idleTimeout" value="${db.idleTimeout}" />
+				<property name="maxLifetime" value="${db.maxLifetime}" />
+				<property name="maximumPoolSize" value="${db.maximumPoolSize}" />
+				<property name="minimumIdle" value="${db.minimumIdle}" />
+			</bean>
+		</constructor-arg>
+	</bean>
+	<alias name="personDirectoryPrincipalResolver" alias="primaryPrincipalResolver" />
+
+	<util:map id="attrRepoBackingMap">
+		<entry key="uid" value="uid" />
+		<entry key="eduPersonAffiliation" value="eduPersonAffiliation" />
+		<entry key="groupMembership" value="groupMembership" />
+		<entry>
+			<key>
+				<value>memberOf</value>
+			</key>
+			<list>
+				<value>faculty</value>
+				<value>staff</value>
+				<value>org</value>
+			</list>
+		</entry>
+	</util:map>
+
+	<alias name="serviceThemeResolver" alias="themeResolver" />
+
+	<alias name="jsonServiceRegistryDao" alias="serviceRegistryDao" />
+
+	<alias name="defaultTicketRegistry" alias="ticketRegistry" />
+
+	<!--******************************** redis start **************************************** -->
+
+	<bean id="defaultTicketRegistry" class="com.github.water.service.persondir.support.RedisTicketRegistry">
+		<!-- <property name="hosts" value="${redis.host}" />
+		<property name="port" value="${redis.port}" /> -->
+		<property name="prefix" value="${redis.prefix}" />
+		<property name="st_time" value="${st.timeToKillInSeconds}" />
+		<property name="tgt_time" value="${tgt.timeToKillInSeconds}" />
+		<property name="redisService" ref="redisService" />
+	</bean>
+
+	<bean id="redisService" class="com.github.water.service.RedisServiceImpl">
+		<property name="redisTemplate" ref="redisTemplate" />
+	</bean>
+
+	<!--******************************** redis end **************************************** -->
+
+
+	<alias name="ticketGrantingTicketExpirationPolicy" alias="grantingTicketExpirationPolicy" />
+	<alias name="multiTimeUseOrTimeoutExpirationPolicy" alias="serviceTicketExpirationPolicy" />
+
+	<bean id="serviceTicketExpirationPolicy"
+		class="org.jasig.cas.ticket.support.MultiTimeUseOrTimeoutExpirationPolicy"
+		c:numberOfUses="${st.numberOfUses}" c:timeToKill="${st.timeToKillInSeconds}"
+		c:timeUnit-ref="SECONDS" />
+
+	<!-- TicketGrantingTicketExpirationPolicy: Default as of 3.5 -->
+	<!-- 当用户在2个小时（配置中是毫秒）之内不动移动鼠标或者进行系统超过8个小时（28800秒），则tgt过期 -->
+	<!-- Provides both idle and hard timeouts, for instance 2 hour sliding window 
+		with an 8 hour max lifetime -->
+	<bean id="grantingTicketExpirationPolicy"
+		class="org.jasig.cas.ticket.support.TicketGrantingTicketExpirationPolicy"
+		p:maxTimeToLiveInSeconds="${tgt.maxTimeToLiveInSeconds}"
+		p:timeToKillInSeconds="${tgt.timeToKillInSeconds}" />
+
+	<alias name="anyAuthenticationPolicy" alias="authenticationPolicy" />
+	<alias name="acceptAnyAuthenticationPolicyFactory" alias="authenticationPolicyFactory" />
 
 	<bean id="auditTrailManager"
-		class="com.github.inspektr.audit.support.Slf4jLoggingAuditTrailManager" />
+		class="org.jasig.inspektr.audit.support.Slf4jLoggingAuditTrailManager"
+		p:entrySeparator="${cas.audit.singleline.separator:|}"
+		p:useSingleLine="${cas.audit.singleline:false}" />
 
-	<bean id="healthCheckMonitor" class="org.jasig.cas.monitor.HealthCheckMonitor"
-		p:monitors-ref="monitorsList" />
+	<alias name="neverThrottle" alias="authenticationThrottle" />
 
 	<util:list id="monitorsList">
-		<bean class="org.jasig.cas.monitor.MemoryMonitor"
-			p:freeMemoryWarnThreshold="10" />
-		<!-- NOTE The following ticket registries support SessionMonitor: * DefaultTicketRegistry 
-			* JpaTicketRegistry Remove this monitor if you use an unsupported registry. -->
-		<bean class="org.jasig.cas.monitor.SessionMonitor"
-			p:ticketRegistry-ref="ticketRegistry"
-			p:serviceTicketCountWarnThreshold="5000" p:sessionCountWarnThreshold="100000" />
+		<ref bean="memoryMonitor" />
+		<ref bean="sessionMonitor" />
 	</util:list>
+
+	<alias name="defaultPrincipalFactory" alias="principalFactory" />
+	<alias name="defaultAuthenticationTransactionManager" alias="authenticationTransactionManager" />
+	<alias name="defaultPrincipalElectionStrategy" alias="principalElectionStrategy" />
+
+	<bean
+		class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration" />
+
+	<!-- redis操作模板 -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+	<bean id="connectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.password}"
+		p:pool-config-ref="poolConfig" />
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig" />
 </beans>

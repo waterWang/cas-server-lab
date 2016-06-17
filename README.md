@@ -8,15 +8,15 @@
 
 ## 环境
 	tomcat8 + jdk 8
-	base on Cas 4.0.0
+	base on Cas 4.2.0
 	
 
-### 当前版本 v0.0.0.5
+### 当前版本 v0.0.1.0
 
-- [x] [REST API方式注册用户](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.5)   
-- [x] [REST API方式修改密码](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.5)
-- [x] [REST API方式获取用户信息](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.5) 
-- [x] [REST API方式logout](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.0.5) 
+- [x] [update cas-server4.2](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.1.0)   
+- [x] [集成spring-session，将session存储于redis](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.1.0)
+- [x] [集成redis，将TGT报错在redis中](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.1.0) 
+- [x] [REST API。真正意义上的rest，同时支持扩展rest接口](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.1.0) 
 
 
 ## 意见反馈
@@ -27,5 +27,4 @@
 
 ## 参考文献
 1.  CAS 官网：<http://www.jasig.org/cas>
-2.  CAS Document API：<http://jasig.github.io/cas/4.0.x/index.html>
-3.  集成REST：<http://jasig.github.io/cas/4.0.x/protocol/REST-Protocol.html>
+2.  CAS Document API：<http://apereo.github.io/cas/4.2.x/index.html>
