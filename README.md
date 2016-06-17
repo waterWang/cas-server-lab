@@ -14,8 +14,8 @@
 ### 当前版本 v0.0.1.0
 
 - [x] [update cas-server4.2](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.1.0)   
-- [x] [集成spring-session，将session存储于redis](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.1.0)
-- [x] [集成redis，将TGT报错在redis中](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.1.0) 
+- [x] [集成spring-session，将session持久化于redis](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.1.0)
+- [x] [集成redis，将TGT持久化在redis中](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.1.0) 
 - [x] [REST API。真正意义上的rest，同时支持扩展rest接口](https://github.com/waterWang/cas-server-lab/tree/release-v0.0.1.0) 
 
 
