@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.water.conf.MyPasswordEncoder;
 import com.github.water.domain.UserInfo;
@@ -28,37 +30,60 @@ public class UserInfoService {
 	public MyPasswordEncoder myPasswordEncoder;
 
 	private final String DEFAULT_SELECT_STATEMENT = "select * from jhi_user where lower(login) = ? or phone_number = ? or lower(email) = ?";
+	private final String DEFAULT_SELECT_PWD_STATEMENT = "select password from jhi_user where lower(login) = ? or phone_number = ? or lower(email) = ?";
 	private final String DEFAULT_CREATE_STATEMENT = "INSERT INTO jhi_user (login,password,activated,created_by,created_date,email,phone_number) VALUES(?,?,?,?,?,?,?)";
 	private final String DEFAULT_UPDATE_STATEMENT = "update jhi_user set password = ? where id = ?";
 	private final String DEFAULT_GET_STATEMENT = "select * from jhi_user where id = ?";
 
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public String updatePwd(String newPwd, Long id) {
-		List<UserInfo> listUserInfo = jdbcTemplate.query(
-				DEFAULT_GET_STATEMENT, new UserInfoRowMapper(), id);
-		
+		List<UserInfo> listUserInfo = jdbcTemplate.query(DEFAULT_GET_STATEMENT,
+				new UserInfoRowMapper(), id);
+
 		if (listUserInfo == null) {
 			return "the account is not exist";
-		}
-		else {
+		} else {
 			String pwd = myPasswordEncoder.encode(newPwd);
 			jdbcTemplate.update(DEFAULT_UPDATE_STATEMENT, new Object[] { pwd,
 					id });
 			return "success";
 		}
-		
+
 	}
 
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public UserInfo loadUserInfo(String username) {
-		List<UserInfo> listUserInfo = jdbcTemplate.query(
+		/*
+		 * List<UserInfo> listUserInfo = jdbcTemplate.query(
+		 * DEFAULT_SELECT_STATEMENT, new UserInfoRowMapper(), username,
+		 * username, username); log.info("query UserInfo List " + listUserInfo);
+		 * if (listUserInfo != null && listUserInfo.size() > 0) { return
+		 * listUserInfo.get(0); } return null;
+		 */
+
+		UserInfo userInfo = jdbcTemplate.queryForObject(
 				DEFAULT_SELECT_STATEMENT, new UserInfoRowMapper(), username,
 				username, username);
-		log.info("query UserInfo List " + listUserInfo);
-		if (listUserInfo != null && listUserInfo.size() > 0) {
-			return listUserInfo.get(0);
+		log.info("query UserInfo List " + userInfo);
+		if (userInfo != null) {
+			return userInfo;
 		}
 		return null;
 	}
 
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public String getPWD(String username) {
+
+		String pwd = jdbcTemplate.queryForObject(DEFAULT_SELECT_PWD_STATEMENT,
+				String.class, username, username, username);
+		log.info("query UserInfo List " + pwd);
+		if (pwd != null) {
+			return pwd;
+		}
+		return null;
+	}
+
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public Map<String, Object> cerateUser(UserInfo userInfo) {
 		Map<String, Object> result = new HashMap<String, Object>();
 
@@ -82,6 +107,7 @@ public class UserInfoService {
 		return result;
 	}
 
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	private final class UserInfoRowMapper implements RowMapper<UserInfo> {
 		@Override
 		public UserInfo mapRow(ResultSet rs, int rowNum) throws SQLException {

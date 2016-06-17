@@ -27,15 +27,13 @@ public class AccoutAttributeDao extends StubPersonAttributeDao {
 		this.userInfoService = userInfoService;
 	}
 	
-//	public String server = "https://wangweiwei:8443/cas/login";
-//	public String service = "http://172.16.40.99:8080/j_spring_cas_security_check";
-	
 	@Override
 	public IPersonAttributes getPerson(String uid) {
 		
 		UserInfo u = this.userInfoService.loadUserInfo(uid);
 		
 		System.out.println("~~~~~"+ u.getId());
+		System.err.println("~~~~~"+ u.getEmail());
 //		String ticket = CasServerUtil.getTicket(server, uid, u.getPassword(), service);
 		
 		Map<String, List<Object>> attributes = new HashMap<String, List<Object>>();

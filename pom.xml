@@ -7,10 +7,15 @@
 	<artifactId>cas-server-lab</artifactId>
 	<groupId>com.github.water</groupId>
 	<packaging>war</packaging>
-	<version>0.0.0.5</version>
+	<version>0.0.1.0</version>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>com.rimerosolutions.maven.plugins</groupId>
+				<artifactId>wrapper-maven-plugin</artifactId>
+				<version>0.0.4</version>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -44,12 +49,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-webapp</artifactId>
 			<version>${cas.version}</version>
@@ -62,48 +61,99 @@
 			<version>${cas.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-core-util</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>1.10.19</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>3.2.0.RELEASE</version>
+		</dependency>
+		<!-- jdbc 连接 start -->
+		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
-			<version>2.4.3</version>
+			<version>${HikariCP.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.6</version>
 		</dependency>
-		<dependency>
-			<groupId>org.jasig.cas</groupId>
-			<artifactId>cas-server-support-jdbc</artifactId>
-			<version>${cas.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
-			<!-- <scope>test</scope> -->
-		</dependency>
+		<!-- jdbc 连接 end -->
 
+		<!-- 将TGT存入redis -->
 		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.5.2</version>
+		</dependency>
+		<!-- 将TGT存入redis -->
+		<!-- <dependency>
 			<groupId>org.jasig.cas</groupId>
-			<artifactId>cas-server-integration-restlet</artifactId>
+			<artifactId>cas-server-support-rest</artifactId>
 			<version>${cas.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>3.2.6.RELEASE</version>
-		</dependency>
+		</dependency> -->
 
+		<!-- spring-session-redis -->
 		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20090211</version>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>1.4.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session</artifactId>
+			<version>1.0.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+			<version>2.2</version>
 		</dependency>
 	</dependencies>
 
 	<properties>
-		<cas.version>4.0.0</cas.version>
+		<cas.version>4.2.0</cas.version>
+		<HikariCP.version>2.4.3</HikariCP.version>
+		<spring.version>4.2.3.RELEASE</spring.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -119,5 +169,4 @@
 			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 		</repository>
 	</repositories>
-	<description>cas-server-lab</description>
 </project>
