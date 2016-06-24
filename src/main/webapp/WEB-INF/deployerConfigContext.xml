@@ -52,11 +52,17 @@
 		class="com.github.water.authentication.AcceptJdbcUsersAuthenticationHandler">
 		<property name="userInfoService" ref="userInfoService" />
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
-		<property name="passwordEncoder">
-			<!-- 自定义加密方式（security的BCryptPasswordEncoder加密） -->
-			<bean id="passwordEncoder" class="com.github.water.conf.MyPasswordEncoder">
+		<!-- <property name="myPasswordEncoder">
+			自定义加密方式（security的BCryptPasswordEncoder加密）
+			<bean id="myPasswordEncoder" class="com.github.water.conf.MyPasswordEncoder">
 			</bean>
-		</property>
+		</property> -->
+		<property name="myPasswordEncoder">     
+        <bean class="org.springframework.security.authentication.encoding.Md5PasswordEncoder">     
+            <!-- false 表示：生成32位的Hex版, 这也是encodeHashAsBase64的, Acegi 默认配置; true  表示：生成24位的Base64版 -->     
+            <property name="encodeHashAsBase64" value="false" />     
+        </bean>     
+    </property>
 	</bean>
 
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">

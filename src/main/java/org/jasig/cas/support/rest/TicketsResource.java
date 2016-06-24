@@ -110,26 +110,34 @@ public class TicketsResource {
 	public final ResponseEntity<String> createTicketGrantingTicket(
 			@RequestBody final MultiValueMap<String, String> requestBody,
 			final HttpServletRequest request) throws JsonProcessingException {
-		long start=System.currentTimeMillis();   //获取开始时间
+		long start = System.currentTimeMillis(); // 获取开始时间
 		try (Formatter fmt = new Formatter()) {
-
+			
 			final Credential credential = this.credentialFactory
 					.fromRequestBody(requestBody);
-
+			
 			final AuthenticationContextBuilder builder = new DefaultAuthenticationContextBuilder(
 					this.authenticationSystemSupport
 							.getPrincipalElectionStrategy());
+			
 			final AuthenticationTransaction transaction = AuthenticationTransaction
 					.wrap(credential);
+			
+			long start4 = System.currentTimeMillis();
 			this.authenticationSystemSupport
 					.getAuthenticationTransactionManager().handle(transaction,
 							builder);
+			long end4 = System.currentTimeMillis(); // 获取结束时间
+			System.err.println("authenticationSystemSupport~~~~~~： "+(end4-start4)+"ms");
+			
 			final AuthenticationContext authenticationContext = builder.build();
-
+			
 			final TicketGrantingTicket tgtId = this.centralAuthenticationService
 					.createTicketGrantingTicket(authenticationContext);
+			
 			final URI ticketReference = new URI(request.getRequestURL()
 					.toString() + '/' + tgtId.getId());
+			
 			final HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ticketReference);
 			headers.setContentType(MediaType.TEXT_HTML);
@@ -141,9 +149,9 @@ public class TicketsResource {
 					.format("\" method=\"POST\">Service:<input type=\"text\" name=\"service\" value=\"\">")
 					.format("<br><input type=\"submit\" value=\"Submit\"></form></body></html>");
 			
-			long end=System.currentTimeMillis(); //获取结束时间
-
-			System.err.println("createTicketGrantingTicket~~~~~~： "+(end-start)+"ms");
+			long end = System.currentTimeMillis(); // 获取结束时间
+			System.err.println("createTicketGrantingTicket~~~~~~： "
+					+ (end - start) + "ms");
 			return new ResponseEntity<>(fmt.toString(), headers,
 					HttpStatus.CREATED);
 
@@ -300,9 +308,7 @@ public class TicketsResource {
 				throw new BadRequestException(
 						"Invalid payload. 'username' and 'password' form fields are required.");
 			}
-			return new UsernamePasswordCredential(
-					requestBody.getFirst("username"),
-					requestBody.getFirst("password"));
+			return new UsernamePasswordCredential(username, password);
 		}
 	}
 

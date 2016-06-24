@@ -52,7 +52,6 @@ public class RedisTicketRegistry extends AbstractTicketRegistry{
 
 	@Override
 	public void addTicket(Ticket ticket) {
-		long start = System.currentTimeMillis();
 		int seconds = 0;
 		String key = prefix + ticket.getId();
 		if (ticket instanceof TicketGrantingTicket) {
@@ -85,59 +84,8 @@ public class RedisTicketRegistry extends AbstractTicketRegistry{
 		// redisService.addHcode(data,seconds);
 		redisService.set(key.getBytes(), bos.toByteArray(), seconds);
 		
-		long end = System.currentTimeMillis(); // 获取结束时间
-		System.err.println("addTicket~~~~~~： " + (end - start)
-				+ "ms");
 	}
 	
-//	@Override
-//	public void addTicket(Ticket ticket) {
-//		Map<byte[], byte[]> data = new HashMap<byte[], byte[]>();
-//		
-//		cachePool = new JedisPool(new JedisPoolConfig(), hosts, port);
-//		Jedis jedis = cachePool.getResource();
-//		Pipeline p = jedis.pipelined();
-//		int seconds = 0;
-//		String key = prefix + ticket.getId();
-//		System.err.println(("Ticket [" + ticket.getId()+ " is of type " + ticket.getClass()));
-//		if (ticket instanceof TicketGrantingTicket) {
-//			seconds = tgt_time;
-//		} else {
-//			seconds = st_time ;
-//		}
-//
-//		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//		ObjectOutputStream oos = null;
-//		try {
-//			oos = new ObjectOutputStream(bos);
-//			oos.writeObject(ticket);
-//
-//		} catch (Exception e) {
-//			logger.error("adding ticket to redis error.");
-//		} finally {
-//			try {
-//				if (null != oos)
-//					oos.close();
-//			} catch (Exception e) {
-//				logger.error("oos closing error when adding ticket to redis.");
-//			}
-//		}
-//		
-//		for (int i = 0; i < 10000; i++) {
-//			data.clear();
-//			data.put(key.getBytes(), bos.toByteArray());
-//			p.hmset(key.getBytes(), data);
-//			p.expire(key.getBytes(), seconds);
-//		}
-//		
-//		p.sync();
-//		
-////		jedis.set(key.getBytes(), bos.toByteArray());
-////		jedis.expire(key.getBytes(), seconds);
-//
-//		cachePool.returnResource(jedis);
-//
-//	}
 
 	@Override
 	public Ticket getTicket(final String ticketId) {

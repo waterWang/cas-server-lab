@@ -5,8 +5,9 @@ import org.jasig.cas.authentication.PreventedException;
 import org.jasig.cas.authentication.UsernamePasswordCredential;
 import org.jasig.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 
-import com.github.water.conf.MyPasswordEncoder;
+
 import com.github.water.service.UserInfoService;
 
 import javax.security.auth.login.AccountNotFoundException;
@@ -19,45 +20,50 @@ import java.security.GeneralSecurityException;
 public class AcceptJdbcUsersAuthenticationHandler extends
 		AbstractUsernamePasswordAuthenticationHandler {
 
-	public final static String FORMAT_DATE_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
-
-	/** The list of users we will accept. */
 	@NotNull
 	protected UserInfoService userInfoService;
 
 	protected JdbcTemplate jdbcTemplate;
 
-	/**
-     * 
-     **/
+	public Md5PasswordEncoder myPasswordEncoder;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.jasig.cas.authentication.handler.support.
+	 * AbstractUsernamePasswordAuthenticationHandler
+	 * #authenticateUsernamePasswordInternal
+	 * (org.jasig.cas.authentication.UsernamePasswordCredential)
+	 */
 	@Override
 	protected HandlerResult authenticateUsernamePasswordInternal(
 			UsernamePasswordCredential credential)
 			throws GeneralSecurityException, PreventedException {
 		long start = System.currentTimeMillis();
 		final String username = credential.getUsername();
-		final String dbPassword = this.userInfoService.getPWD(username);
+		String dbPassword = this.userInfoService.getPWD(username);
 
-		if (dbPassword == null) {
+		if (null == dbPassword) {
 			logger.debug("{} was not found in the map.", username);
 			throw new AccountNotFoundException(username
 					+ " not found in backing map.");
 		}
 
-		final String rawPassword = credential.getPassword(); // 明文密码
-		// final String dbPassword = u.getPassword(); //密文密码
+		String inputPwd = credential.getPassword(); // 明文密码
+		long start5 = System.currentTimeMillis();
+		boolean isMatch = myPasswordEncoder.isPasswordValid(dbPassword,
+				inputPwd, username);
+		long end5 = System.currentTimeMillis(); // 获取结束时间
+		System.err.println("passwordEncoder~~~~~~： " + (end5 - start5) + "ms");
 
-		if (!MyPasswordEncoder.match(rawPassword, dbPassword)) {
+		if (!isMatch) {
 			throw new FailedLoginException();
 		}
 		long end = System.currentTimeMillis(); // 获取结束时间
-
-		System.err.println("authenticate~~~~~~： " + (end - start)
-				+ "ms");
+		System.err.println("HandlerResult~~~~~~： " + (end - start) + "ms");
 		return createHandlerResult(credential,
 				this.principalFactory.createPrincipal(username), null);
 	}
-
 
 	public boolean logout(HttpServletResponse response) {
 		return true;
@@ -72,4 +78,11 @@ public class AcceptJdbcUsersAuthenticationHandler extends
 		this.userInfoService = userInfoService;
 	}
 
+	public Md5PasswordEncoder getMyPasswordEncoder() {
+		return myPasswordEncoder;
+	}
+
+	public void setMyPasswordEncoder(Md5PasswordEncoder myPasswordEncoder) {
+		this.myPasswordEncoder = myPasswordEncoder;
+	}
 }
