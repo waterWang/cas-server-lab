@@ -34,7 +34,7 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <AsyncLogger  name="org.jasig" level="info" additivity="false" includeLocation="true">
+        <AsyncLogger  name="org.jasig" level="warn" additivity="false" includeLocation="true">
             <AppenderRef ref="console"/>
             <AppenderRef ref="file"/>
         </AsyncLogger>
@@ -43,14 +43,14 @@
         <AsyncLogger name="org.springframework.web" level="warn" />
         <Logger name="org.pac4j" level="warn" />
 
-        <AsyncLogger name="perfStatsLogger" level="info" additivity="false" includeLocation="true">
+        <AsyncLogger name="perfStatsLogger" level="warn" additivity="false" includeLocation="true">
             <AppenderRef ref="perfFileAppender"/>
         </AsyncLogger>
 
-        <AsyncLogger name="org.jasig.cas.web.flow" level="info" additivity="true" includeLocation="true">
+        <AsyncLogger name="org.jasig.cas.web.flow" level="warn" additivity="true" includeLocation="true">
             <AppenderRef ref="file"/>
         </AsyncLogger>
-        <AsyncLogger name="org.jasig.inspektr.audit.support" level="info" includeLocation="true">
+        <AsyncLogger name="org.jasig.inspektr.audit.support" level="warn" includeLocation="true">
             <AppenderRef ref="auditlogfile"/>
             <AppenderRef ref="file"/>
         </AsyncLogger>

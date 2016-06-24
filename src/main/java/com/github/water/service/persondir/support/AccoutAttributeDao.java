@@ -32,8 +32,8 @@ public class AccoutAttributeDao extends StubPersonAttributeDao {
 		
 		UserInfo u = this.userInfoService.loadUserInfo(uid);
 		
-		System.out.println("~~~~~"+ u.getId());
-		System.err.println("~~~~~"+ u.getEmail());
+//		System.out.println("~~~~~"+ u.getId());
+//		System.err.println("~~~~~"+ u.getEmail());
 //		String ticket = CasServerUtil.getTicket(server, uid, u.getPassword(), service);
 		
 		Map<String, List<Object>> attributes = new HashMap<String, List<Object>>();

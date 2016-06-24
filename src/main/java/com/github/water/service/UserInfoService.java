@@ -29,8 +29,8 @@ public class UserInfoService {
 	public JdbcTemplate jdbcTemplate;
 	public MyPasswordEncoder myPasswordEncoder;
 
-	private final String DEFAULT_SELECT_STATEMENT = "select * from jhi_user where lower(login) = ? or phone_number = ? or lower(email) = ?";
-	private final String DEFAULT_SELECT_PWD_STATEMENT = "select password from jhi_user where lower(login) = ? or phone_number = ? or lower(email) = ?";
+	private final String DEFAULT_SELECT_STATEMENT = "select * from jhi_user where login = ? UNION ALL select * from jhi_user where phone_number = ? UNION ALL select * from jhi_user where email  = ?";
+	private final String DEFAULT_SELECT_PWD_STATEMENT = "select password from jhi_user where login = ? UNION ALL select password from jhi_user where phone_number = ? UNION ALL select password from jhi_user where email = ?";
 	private final String DEFAULT_CREATE_STATEMENT = "INSERT INTO jhi_user (login,password,activated,created_by,created_date,email,phone_number) VALUES(?,?,?,?,?,?,?)";
 	private final String DEFAULT_UPDATE_STATEMENT = "update jhi_user set password = ? where id = ?";
 	private final String DEFAULT_GET_STATEMENT = "select * from jhi_user where id = ?";
@@ -60,10 +60,10 @@ public class UserInfoService {
 		 * if (listUserInfo != null && listUserInfo.size() > 0) { return
 		 * listUserInfo.get(0); } return null;
 		 */
-
+		String lowerName = username.toLowerCase();
 		UserInfo userInfo = jdbcTemplate.queryForObject(
-				DEFAULT_SELECT_STATEMENT, new UserInfoRowMapper(), username,
-				username, username);
+				DEFAULT_SELECT_STATEMENT, new UserInfoRowMapper(), lowerName,
+				lowerName, lowerName);
 		log.info("query UserInfo List " + userInfo);
 		if (userInfo != null) {
 			return userInfo;
@@ -71,16 +71,20 @@ public class UserInfoService {
 		return null;
 	}
 
+	/**
+	 * @param username
+	 * @return
+	 */
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public String getPWD(String username) {
-
+		
+		String lowerName = username.toLowerCase();
 		String pwd = jdbcTemplate.queryForObject(DEFAULT_SELECT_PWD_STATEMENT,
-				String.class, username, username, username);
-		log.info("query UserInfo List " + pwd);
-		if (pwd != null) {
-			return pwd;
+				String.class, lowerName, lowerName, lowerName);
+		if (null == pwd) {
+			return null;
 		}
-		return null;
+		return pwd;
 	}
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)

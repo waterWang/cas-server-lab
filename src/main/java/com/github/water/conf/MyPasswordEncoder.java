@@ -16,7 +16,7 @@ public class MyPasswordEncoder implements PasswordEncoder {
 		return  passwordEncoder.encode(rawPassword);
 	}
 	//rawPassword 明文。 password 密文
-	public static boolean match(String rawPassword, String password) {  
+	public  boolean match(String rawPassword, String password) {  
         return passwordEncoder.matches(rawPassword, password);  
    } 
 	
