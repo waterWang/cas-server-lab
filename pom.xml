@@ -8,6 +8,21 @@
 	<groupId>com.github.water</groupId>
 	<packaging>war</packaging>
 	<version>0.0.1.0</version>
+	
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>001</id>
+			<name>waterWang</name>
+			<email>672684719@qq.com</email>
+		</developer>
+	</developers>
 
 	<build>
 		<plugins>
